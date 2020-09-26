@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/spacing_small"
                 android:text="@string/categoryHeader"
-                android:textAppearance="?attr/textAppearanceSubtitle2" />
+                android:textAppearance="?attr/textAppearanceBody1" />
 
             <HorizontalScrollView
                 android:layout_width="wrap_content"
@@ -37,10 +37,16 @@
                     android:id="@+id/chipview_category_filter_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_normal" />
+                    android:paddingVertical="@dimen/spacing_normal" />
+
             </HorizontalScrollView>
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/border_small"
+            android:background="@android:color/darker_gray" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_exercise_list"

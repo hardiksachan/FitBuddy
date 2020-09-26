@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hardiksachan.fitbuddy.databinding.ListItemExerciseBinding
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
+import com.hardiksachan.fitbuddy.R
 import kotlinx.coroutines.*
 
 class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
@@ -35,7 +36,8 @@ class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
 
             FitBuddyRepository(binding.root.context.applicationContext).getExerciseCategoryFromId(item.category)
                 .observe(binding.lifecycleOwner!!, Observer {
-                    binding.tvExerciseCategory.text = it
+                    binding.tvExerciseCategory.text =
+                        binding.tvExerciseCategory.context.getString(R.string.category_format, it)
                 })
             binding.tvExerciseEquipment.text = "Equipment: ${item.equipment}"
         }
