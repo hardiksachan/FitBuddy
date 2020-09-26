@@ -25,3 +25,8 @@ data class ExerciseCategory constructor(
     val id: Int,
     val name: String
 )
+
+data class Equipment constructor(
+    val id: Int,
+    val name: String
+)

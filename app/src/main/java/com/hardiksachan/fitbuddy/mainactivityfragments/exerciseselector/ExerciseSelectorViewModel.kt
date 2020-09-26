@@ -16,14 +16,16 @@ class ExerciseSelectorViewModel(application: Application) : AndroidViewModel(app
 
     init {
         viewModelScope.launch {
-            fitBuddyRepository.refreshExercises()
+            fitBuddyRepository.refreshEquipments()
             fitBuddyRepository.refreshExerciseCategories()
+            fitBuddyRepository.refreshExercises()
         }
         _eventUpdateExerciseLiveDataObserver.value = true
     }
 
     var exercises = fitBuddyRepository.getExercises()
     val exerciseCategories = fitBuddyRepository.exerciseCategories
+    val equipments = fitBuddyRepository.equipments
 
     var categoryFilterList: MutableList<Int> = mutableListOf()
 

@@ -3,9 +3,8 @@ package com.hardiksachan.fitbuddy.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.Deferred
 
-private const val DATABASE_VERSION = 5
+private const val DATABASE_VERSION = 6
 
 @Dao
 interface ExerciseDao {
@@ -26,10 +25,19 @@ interface ExerciseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllExerciseCategories(vararg exercises: DatabaseExerciseCategory)
+
+    @Query("SELECT * from database_equipment")
+    fun getEquipments() : LiveData<List<DatabaseEquipment>>
+
+    @Query("SELECT name from database_equipment WHERE id = :id")
+    fun getEquipmentNameFromId(id: Int): LiveData<String>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllEquipments(vararg equipment: DatabaseEquipment)
 }
 
 @Database(
-    entities = [DatabaseExercise::class, DatabaseExerciseCategory::class],
+    entities = [DatabaseExercise::class, DatabaseExerciseCategory::class, DatabaseEquipment::class],
     version = DATABASE_VERSION,
     exportSchema = false
 )

@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.hardiksachan.fitbuddy.domain.Equipment
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 
@@ -26,6 +27,13 @@ data class DatabaseExercise constructor(
 
 @Entity(tableName = "database_exercise_category")
 data class DatabaseExerciseCategory constructor(
+    @PrimaryKey
+    val id: Int,
+    val name: String
+)
+
+@Entity(tableName = "database_equipment")
+data class DatabaseEquipment constructor(
     @PrimaryKey
     val id: Int,
     val name: String
@@ -53,6 +61,16 @@ fun List<DatabaseExercise>.asDomainModel(): List<Exercise> {
 fun List<DatabaseExerciseCategory>.asDomainModel(): List<ExerciseCategory> {
     return map {
         ExerciseCategory(
+            id = it.id,
+            name = it.name
+        )
+    }
+}
+
+@JvmName("asDomainModelDatabaseEquipment")
+fun List<DatabaseEquipment>.asDomainModel(): List<Equipment> {
+    return map {
+        Equipment(
             id = it.id,
             name = it.name
         )

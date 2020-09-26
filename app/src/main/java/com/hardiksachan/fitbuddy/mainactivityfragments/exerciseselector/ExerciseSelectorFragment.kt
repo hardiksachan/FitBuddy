@@ -1,16 +1,18 @@
 package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import com.hardiksachan.fitbuddy.databinding.FragmentExerciseSelectorBinding
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.chip.Chip
-import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.R
+import com.hardiksachan.fitbuddy.databinding.FragmentExerciseSelectorBinding
+import com.hardiksachan.fitbuddy.domain.ExerciseCategory
+import timber.log.Timber
 
 class ExerciseSelectorFragment : Fragment() {
 

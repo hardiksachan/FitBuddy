@@ -32,6 +32,9 @@ interface WgerApiService {
 
     @GET("exercisecategory/")
     fun getExerciseCategories() : Deferred<ListResponse<NetworkExerciseCategory>>
+
+    @GET("equipment/")
+    fun getEquipments() : Deferred<ListResponse<NetworkEquipment>>
 }
 
 object WgerApi {

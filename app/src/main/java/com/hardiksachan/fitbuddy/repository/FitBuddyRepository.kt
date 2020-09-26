@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.hardiksachan.fitbuddy.database.asDomainModel
 import com.hardiksachan.fitbuddy.database.getDatabase
+import com.hardiksachan.fitbuddy.domain.Equipment
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.network.WgerApi
@@ -35,7 +36,14 @@ class FitBuddyRepository(private val applicationContext: Context) {
             it.asDomainModel()
         }
 
+    val equipments: LiveData<List<Equipment>> =
+        Transformations.map(database.exerciseDao.getEquipments()) {
+            it.asDomainModel()
+        }
+
     fun getExerciseCategoryFromId(id: Int) = database.exerciseDao.getExerciseCategoryNameFromId(id)
+
+    fun getEquipmentFromId(id: Int) = database.exerciseDao.getEquipmentNameFromId(id)
 
 
     suspend fun refreshExercises() {
@@ -43,7 +51,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
             try {
                 Timber.i("Started to look for exercises")
                 val exerciseResponse = WgerApi.retrofitService.getExercises(2, 2).await()
-                Timber.i("${exerciseResponse.results!!.size} exercises fetched}")
+                Timber.i("${exerciseResponse.results!!.size} exercises fetched")
                 database.exerciseDao.insertAllExercises(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved exercises to db")
             } catch (t: Throwable) {
@@ -58,9 +66,23 @@ class FitBuddyRepository(private val applicationContext: Context) {
             try {
                 Timber.i("Started to look for exercise categories")
                 val exerciseResponse = WgerApi.retrofitService.getExerciseCategories().await()
-                Timber.i("${exerciseResponse.results!!.size} exercise categories fetched}")
+                Timber.i("${exerciseResponse.results!!.size} exercise categories fetched")
                 database.exerciseDao.insertAllExerciseCategories(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved exercise categories to db")
+            } catch (t: Throwable) {
+                Timber.e(t.message.toString())
+            }
+        }
+    }
+
+    suspend fun refreshEquipments() {
+        withContext(Dispatchers.IO) {
+            try {
+                Timber.i("Started to look for equipments")
+                val exerciseResponse = WgerApi.retrofitService.getEquipments().await()
+                Timber.i("${exerciseResponse.results!!.size} equipments fetched")
+                database.exerciseDao.insertAllEquipments(*exerciseResponse.results!!.asDatabaseModel())
+                Timber.i("Saved equipment to db")
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }

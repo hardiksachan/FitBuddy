@@ -1,5 +1,6 @@
 package com.hardiksachan.fitbuddy.network
 
+import com.hardiksachan.fitbuddy.database.DatabaseEquipment
 import com.hardiksachan.fitbuddy.database.DatabaseExercise
 import com.hardiksachan.fitbuddy.database.DatabaseExerciseCategory
 import com.squareup.moshi.Json
@@ -71,6 +72,14 @@ data class NetworkExerciseCategory(
     var name: String? = null
 )
 
+data class NetworkEquipment(
+    @Json(name = "id")
+    var id: Int? = null,
+
+    @Json(name = "name")
+    var name: String? = null
+)
+
 fun List<NetworkExercise>.asDatabaseModel(): Array<DatabaseExercise> {
     return map {
         DatabaseExercise(
@@ -92,6 +101,15 @@ fun List<NetworkExerciseCategory>.asDatabaseModel() : Array<DatabaseExerciseCate
     return map {
         DatabaseExerciseCategory(
             id = it.id ?: throw Exception("Exercise Category must have Id"),
+            name = it.name ?: "",
+        )
+    }.toTypedArray()
+}
+
+fun List<NetworkEquipment>.asDatabaseModel(): Array<DatabaseEquipment> {
+    return map {
+        DatabaseEquipment(
+            id = it.id ?: throw Exception("Equipment must have Id"),
             name = it.name ?: "",
         )
     }.toTypedArray()
