@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="exerciseItem"
+            type="com.hardiksachan.fitbuddy.domain.Exercise" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:padding="@dimen/margin_small">
+
+        <TextView
+            android:id="@+id/tv_exercise_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="11" />
+
+        <TextView
+            android:id="@+id/tv_exercise_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Crunches"
+            android:padding="@dimen/margin_small"
+            android:textSize="@dimen/text_size_medium" />
+
+    </LinearLayout>
+</layout>
