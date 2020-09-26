@@ -1,8 +1,8 @@
 package com.hardiksachan.fitbuddy.network
 
 import com.hardiksachan.fitbuddy.database.DatabaseExercise
+import com.hardiksachan.fitbuddy.database.DatabaseExerciseCategory
 import com.squareup.moshi.Json
-import java.lang.Exception
 
 
 data class ListResponse<T>(
@@ -63,8 +63,16 @@ data class NetworkExercise(
     var equipment: List<Int>? = null
 )
 
-fun List<NetworkExercise>.asDatabaseModel() : Array<DatabaseExercise>{
-    return map{
+data class NetworkExerciseCategory(
+    @Json(name = "id")
+    var id: Int? = null,
+
+    @Json(name = "name")
+    var name: String? = null
+)
+
+fun List<NetworkExercise>.asDatabaseModel(): Array<DatabaseExercise> {
+    return map {
         DatabaseExercise(
             id = it.id ?: throw Exception("Exercise must have Id"),
             license_author = it.licenseAuthor ?: "",
@@ -76,6 +84,15 @@ fun List<NetworkExercise>.asDatabaseModel() : Array<DatabaseExercise>{
             muscles = it.muscles?.toMutableList() ?: arrayListOf(),
             muscles_secondary = it.musclesSecondary?.toMutableList() ?: arrayListOf(),
             equipment = it.equipment?.toMutableList() ?: arrayListOf()
+        )
+    }.toTypedArray()
+}
+
+fun List<NetworkExerciseCategory>.asDatabaseModel() : Array<DatabaseExerciseCategory> {
+    return map {
+        DatabaseExerciseCategory(
+            id = it.id ?: throw Exception("Exercise Category must have Id"),
+            name = it.name ?: "",
         )
     }.toTypedArray()
 }

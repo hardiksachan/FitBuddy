@@ -3,32 +3,48 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="exerciseItem"
             type="com.hardiksachan.fitbuddy.domain.Exercise" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:padding="@dimen/margin_small">
+        android:layout_margin="@dimen/spacing_small"
+        android:padding="@dimen/spacing_small">
 
-        <TextView
-            android:id="@+id/tv_exercise_id"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_small"
-            android:textSize="@dimen/text_size_medium"
-            tools:text="11" />
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_normal">
 
-        <TextView
-            android:id="@+id/tv_exercise_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Crunches"
-            android:padding="@dimen/margin_small"
-            android:textSize="@dimen/text_size_medium" />
+            <!-- Title, secondary and supporting text -->
+            <TextView
+                android:id="@+id/tv_exercise_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                tools:text="Crunches" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_exercise_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody2"
+                tools:text="Category: Abs" />
+
+            <TextView
+                android:id="@+id/tv_exercise_equipment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="Equipment: Bench, Gym mat" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 </layout>

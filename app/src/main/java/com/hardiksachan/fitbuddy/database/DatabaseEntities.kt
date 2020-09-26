@@ -1,10 +1,13 @@
 package com.hardiksachan.fitbuddy.database
 
+import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.hardiksachan.fitbuddy.domain.Exercise
+import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 
 @Entity(tableName = "database_exercise")
 data class DatabaseExercise constructor(
@@ -21,6 +24,14 @@ data class DatabaseExercise constructor(
     val equipment: MutableList<Int>
 )
 
+@Entity(tableName = "database_exercise_category")
+data class DatabaseExerciseCategory constructor(
+    @PrimaryKey
+    val id: Int,
+    val name: String
+)
+
+@JvmName("asDomainModelDatabaseExercise")
 fun List<DatabaseExercise>.asDomainModel(): List<Exercise> {
     return map {
         Exercise(
@@ -37,3 +48,14 @@ fun List<DatabaseExercise>.asDomainModel(): List<Exercise> {
         )
     }
 }
+
+@JvmName("asDomainModelDatabaseExerciseCategory")
+fun List<DatabaseExerciseCategory>.asDomainModel(): List<ExerciseCategory> {
+    return map {
+        ExerciseCategory(
+            id = it.id,
+            name = it.name
+        )
+    }
+}
+

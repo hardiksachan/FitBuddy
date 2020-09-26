@@ -1,36 +1,53 @@
 package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
-import com.hardiksachan.fitbuddy.database.getDatabase
-import com.hardiksachan.fitbuddy.repository.ExerciseRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
 
 class ExerciseSelectorViewModel(application: Application) : AndroidViewModel(application) {
-    private val _status = MutableLiveData<String>()
-    val status : LiveData<String>
-    get() = _status
 
-    private val viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val _eventUpdateExerciseLiveDataObserver = MutableLiveData<Boolean>()
+    val eventUpdateExerciseLiveDataObserver: LiveData<Boolean>
+        get() = _eventUpdateExerciseLiveDataObserver
 
-    private val database = getDatabase(application)
-    private val exerciseRepository = ExerciseRepository(database)
+    private val fitBuddyRepository = FitBuddyRepository(application)
 
-    init{
+    init {
         viewModelScope.launch {
-            exerciseRepository.refreshExercises()
+            fitBuddyRepository.refreshExercises()
+            fitBuddyRepository.refreshExerciseCategories()
         }
+        _eventUpdateExerciseLiveDataObserver.value = true
     }
 
-    val exercise = exerciseRepository.exercises
+    var exercises = fitBuddyRepository.getExercises()
+    val exerciseCategories = fitBuddyRepository.exerciseCategories
+
+    var categoryFilterList: MutableList<Int> = mutableListOf()
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
+    }
+
+    fun onCategoryFilterChanged(categoryId: Int, checked: Boolean) {
+        if (checked) {
+            categoryFilterList.add(categoryId)
+        } else {
+            categoryFilterList.remove(categoryId)
+        }
+
+        exercises = if (categoryFilterList.size == 0) {
+            fitBuddyRepository.getExercises()
+        } else {
+            fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>)
+        }
+        _eventUpdateExerciseLiveDataObserver.value = true
+    }
+
+    fun eventUpdateExerciseLiveDataObserverDone() {
+        _eventUpdateExerciseLiveDataObserver.value = false
     }
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {

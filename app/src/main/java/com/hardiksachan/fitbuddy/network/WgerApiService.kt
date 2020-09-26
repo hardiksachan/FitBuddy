@@ -24,11 +24,14 @@ private val retrofit = Retrofit.Builder()
 interface WgerApiService {
     @GET("exercise/")
     fun getExercises(
-        @Query(value = "language", encoded = true) language: Int,
-        @Query(value = "status", encoded = true) status: Int,
-        @Query(value = "limit", encoded = true) limit : Int = 20,
+        @Query(value = "language", encoded = true) language: Int = 2, // English
+        @Query(value = "status", encoded = true) status: Int = 2, // Verified Exercises
+        @Query(value = "limit", encoded = true) limit: Int = 20,
         @Query(value = "offset", encoded = true) offset: Int = 40
     ): Deferred<ListResponse<NetworkExercise>>
+
+    @GET("exercisecategory/")
+    fun getExerciseCategories() : Deferred<ListResponse<NetworkExerciseCategory>>
 }
 
 object WgerApi {
