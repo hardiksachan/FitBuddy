@@ -4,4 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="categoryHeader">Category</string>
     <string name="category_format">Category: %s</string>
+    <string name="equipment_format">Equipments: %s</string>
+    <string name="equipment_not_found">No Equipments</string>
+    <string name="equipment_header">Equipment</string>
 </resources>

@@ -14,6 +14,13 @@ interface ExerciseDao {
     @Query("SELECT * from database_exercise WHERE category IN (:categories)")
     fun getExercises(categories: List<Int>): LiveData<List<DatabaseExercise>>
 
+    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author, ex.muscles, ex.muscles_secondary, ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) ")
+    fun getExercisesUsingEquipment(equipments: List<Int>): LiveData<List<DatabaseExercise>>
+
+    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author, ex.muscles, ex.muscles_secondary, ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND ex.category IN (:categories) ")
+    fun getExercises(equipments: List<Int>, categories: List<Int>): LiveData<List<DatabaseExercise>>
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllExercises(vararg exercises: DatabaseExercise)
 
@@ -39,17 +46,19 @@ interface ExerciseDao {
     fun getEquipmentsForExercise(exerciseId: Int): LiveData<List<DatabaseEquipment>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertEquipmentForExercise(vararg equipments : DatabaseExerciseEquipment)
+    fun insertEquipmentForExercise(vararg equipments: DatabaseExerciseEquipment)
 
     @Query("DELETE FROM database_exercise_equipment WHERE exerciseId = :exerciseId")
     fun clearEquipmentsForExercise(exerciseId: Int)
 }
 
 @Database(
-    entities = [DatabaseExercise::class,
+    entities = [
+        DatabaseExercise::class,
         DatabaseExerciseCategory::class,
         DatabaseEquipment::class,
-        DatabaseExerciseEquipment::class],
+        DatabaseExerciseEquipment::class
+    ],
     version = DATABASE_VERSION,
     exportSchema = false
 )

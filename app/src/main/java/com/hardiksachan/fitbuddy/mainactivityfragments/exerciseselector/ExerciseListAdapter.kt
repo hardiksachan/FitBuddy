@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hardiksachan.fitbuddy.R
-import com.hardiksachan.fitbuddy.databinding.ListItemExerciseBinding
+import com.hardiksachan.fitbuddy.databinding.RecyclerviewItemExerciseBinding
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.CoroutineScope
@@ -17,13 +17,13 @@ import kotlinx.coroutines.Job
 
 class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
     ListAdapter<Exercise, ExerciseListAdapter.ViewHolder>(ExerciseDiffCallback()) {
-    class ViewHolder private constructor(val binding: ListItemExerciseBinding) :
+    class ViewHolder private constructor(val binding: RecyclerviewItemExerciseBinding) :
         RecyclerView.ViewHolder(binding.root) {
         companion object {
 
             fun from(parent: ViewGroup, parentLifecycleOwner: LifecycleOwner): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListItemExerciseBinding.inflate(layoutInflater, parent, false)
+                val binding = RecyclerviewItemExerciseBinding.inflate(layoutInflater, parent, false)
                 binding.lifecycleOwner = parentLifecycleOwner
                 return ViewHolder(binding)
             }
@@ -45,9 +45,12 @@ class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
                 })
             item.equipment.observe(binding.lifecycleOwner!!, Observer {
                 binding.tvExerciseEquipment.text = if (it.size > 0) {
-                    it[0].name
+                    val str = it.joinToString { equipment ->
+                        equipment.name
+                    }
+                    binding.root.context.getString(R.string.equipment_format, str)
                 } else {
-                    "Not found"
+                    binding.root.context.getString(R.string.equipment_not_found)
                 }
             })
         }

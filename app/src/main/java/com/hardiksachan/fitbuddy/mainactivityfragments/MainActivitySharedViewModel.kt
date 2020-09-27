@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseSelectorViewModel
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class MainActivitySharedViewModel(application: Application) : AndroidViewModel(application){
 
@@ -15,6 +16,7 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     private val fitBuddyRepository = FitBuddyRepository(application)
 
     var categoryFilterList: MutableList<Int> = mutableListOf()
+    var equipmentFilterList: MutableList<Int> = mutableListOf()
 
     var exercises = fitBuddyRepository.getExercises()
     val exerciseCategories = fitBuddyRepository.exerciseCategories
@@ -36,12 +38,34 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
             categoryFilterList.remove(categoryId)
         }
 
-        exercises = if (categoryFilterList.size == 0) {
+        updateExercises()
+
+    }
+
+    private fun updateExercises() {
+        exercises = if (categoryFilterList.size == 0 && equipmentFilterList.size == 0) {
             fitBuddyRepository.getExercises()
-        } else {
+        } else if (categoryFilterList.size != 0 && equipmentFilterList.size == 0) {
             fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>)
+        } else if (categoryFilterList.size == 0 && equipmentFilterList.size != 0){
+            fitBuddyRepository.getExercises(equipments = equipmentFilterList as List<Int>)
+        } else {
+            fitBuddyRepository.getExercises(categories = categoryFilterList, equipments = equipmentFilterList as List<Int>)
         }
         _eventUpdateExerciseLiveDataObserver.value = true
+    }
+
+    fun onEquipmentFilterChanged(equipmentId: Int, checked: Boolean) {
+        if (checked) {
+            equipmentFilterList.add(equipmentId)
+        } else {
+            equipmentFilterList.remove(equipmentId)
+        }
+
+        Timber.i("Equipment filter changed: $equipmentId was checked to $checked")
+        Timber.i("new Equipment Filter List: $equipmentFilterList")
+
+        updateExercises()
 
     }
 

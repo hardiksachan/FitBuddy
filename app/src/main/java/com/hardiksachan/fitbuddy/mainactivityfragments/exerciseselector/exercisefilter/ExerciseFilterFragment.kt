@@ -9,8 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.google.android.material.chip.Chip
-import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseFilterBinding
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
@@ -47,36 +45,24 @@ class ExerciseFilterFragment : Fragment() {
             }
         })
 
+        val categoryFilterListAdapter =
+            ExerciseCategoryFilterListAdapter(viewLifecycleOwner, sharedViewModel)
+        binding.rvCategoryFilter.adapter = categoryFilterListAdapter
+
+        val equipmentFilterListAdapter =
+            ExerciseEquipmentFilterListAdapter(viewLifecycleOwner, sharedViewModel)
+        binding.rvEquipmentFilter.adapter = equipmentFilterListAdapter
+
         sharedViewModel.exerciseCategories.observe(
-            viewLifecycleOwner,
-            object : Observer<List<ExerciseCategory>> {
-                override fun onChanged(data: List<ExerciseCategory>?) {
-                    data ?: return
-
-                    val chipGroup = binding.cvCategoryFilterList
-                    val layoutInflater = LayoutInflater.from(chipGroup.context)
-
-                    val children = data.map {
-                        val chip = layoutInflater.inflate(
-                            R.layout.filter_chip,
-                            chipGroup, false
-                        ) as Chip
-                        chip.text = it.name
-                        chip.tag = it.id
-                        chip.isChecked = chip.tag in sharedViewModel.categoryFilterList
-                        chip.setOnCheckedChangeListener { button, isChecked ->
-                            sharedViewModel.onCategoryFilterChanged(button.tag as Int, isChecked)
-                        }
-                        chip
-                    }
-                    chipGroup.removeAllViews()
-
-                    for (chip in children) {
-                        chipGroup.addView(chip)
-                    }
-                }
-
+            viewLifecycleOwner, Observer<List<ExerciseCategory>> {
+                categoryFilterListAdapter.submitList(it)
             })
+
+        sharedViewModel.equipments.observe(
+            viewLifecycleOwner, Observer {
+                equipmentFilterListAdapter.submitList(it)
+            }
+        )
 
         return binding.root
     }
