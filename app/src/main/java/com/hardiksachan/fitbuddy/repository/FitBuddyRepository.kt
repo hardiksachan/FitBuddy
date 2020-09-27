@@ -2,8 +2,8 @@ package com.hardiksachan.fitbuddy.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.hardiksachan.fitbuddy.database.DatabaseExerciseEquipment
 import com.hardiksachan.fitbuddy.database.asDomainModel
 import com.hardiksachan.fitbuddy.database.getDatabase
 import com.hardiksachan.fitbuddy.domain.Equipment
@@ -11,7 +11,8 @@ import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.network.WgerApi
 import com.hardiksachan.fitbuddy.network.asDatabaseModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class FitBuddyRepository(private val applicationContext: Context) {
@@ -21,11 +22,11 @@ class FitBuddyRepository(private val applicationContext: Context) {
     fun getExercises(categories: List<Int>? = null): LiveData<List<Exercise>>? {
         val _exercises = if (categories == null) {
             Transformations.map(database.exerciseDao.getExercises()) {
-                it.asDomainModel()
+                it.asDomainModel(this)
             }
         } else {
             Transformations.map(database.exerciseDao.getExercises(categories)) {
-                it.asDomainModel()
+                it.asDomainModel(this)
             }
         }
         return _exercises
@@ -45,6 +46,27 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     fun getEquipmentFromId(id: Int) = database.exerciseDao.getEquipmentNameFromId(id)
 
+    fun deleteAllEquipmentsOfExercise(exerciseId: Int) = database.exerciseDao.clearEquipmentsForExercise(exerciseId)
+
+    fun getEquipmentsFromExercise(exerciseId: Int) =
+        database.exerciseDao.getEquipmentsForExercise(exerciseId)
+
+    suspend fun saveExerciseEquipment(equipment: List<Int>?, id: Int?) {
+        equipment ?: return
+        id ?: return
+
+        equipment.map {
+            withContext(Dispatchers.IO) {
+                database.exerciseDao.insertEquipmentForExercise(
+                    DatabaseExerciseEquipment(
+                        equipmentId = it,
+                        exerciseId = id
+                    )
+                )
+            }
+        }
+
+    }
 
     suspend fun refreshExercises() {
         withContext(Dispatchers.IO) {
@@ -52,7 +74,11 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 Timber.i("Started to look for exercises")
                 val exerciseResponse = WgerApi.retrofitService.getExercises(2, 2).await()
                 Timber.i("${exerciseResponse.results!!.size} exercises fetched")
-                database.exerciseDao.insertAllExercises(*exerciseResponse.results!!.asDatabaseModel())
+                database.exerciseDao.insertAllExercises(
+                    *exerciseResponse.results!!.asDatabaseModel(
+                        this@FitBuddyRepository
+                    )
+                )
                 Timber.i("Saved exercises to db")
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())

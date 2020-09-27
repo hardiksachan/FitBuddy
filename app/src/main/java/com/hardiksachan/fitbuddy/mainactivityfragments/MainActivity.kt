@@ -1,7 +1,8 @@
-package com.hardiksachan.fitbuddy
+package com.hardiksachan.fitbuddy.mainactivityfragments
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.hardiksachan.fitbuddy.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -18,7 +18,7 @@ data class Exercise constructor(
     val language: Int,
     val muscles: List<Int>,
     val muscles_secondary: List<Int>,
-    val equipment: List<Int>
+    val equipment: LiveData<List<Equipment>>
 )
 
 data class ExerciseCategory constructor(

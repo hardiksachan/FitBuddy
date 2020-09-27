@@ -1,55 +1,21 @@
 package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.*
-import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
-import kotlinx.coroutines.launch
 
 class ExerciseSelectorViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _eventUpdateExerciseLiveDataObserver = MutableLiveData<Boolean>()
-    val eventUpdateExerciseLiveDataObserver: LiveData<Boolean>
-        get() = _eventUpdateExerciseLiveDataObserver
+    private val _navigateToFilter = MutableLiveData<Boolean>()
+    val navigateToFilter: LiveData<Boolean>
+        get() = _navigateToFilter
 
-    private val fitBuddyRepository = FitBuddyRepository(application)
 
-    init {
-        viewModelScope.launch {
-            fitBuddyRepository.refreshEquipments()
-            fitBuddyRepository.refreshExerciseCategories()
-            fitBuddyRepository.refreshExercises()
-        }
-        _eventUpdateExerciseLiveDataObserver.value = true
+    fun onFilterFabClicked() {
+        _navigateToFilter.value = true
     }
 
-    var exercises = fitBuddyRepository.getExercises()
-    val exerciseCategories = fitBuddyRepository.exerciseCategories
-    val equipments = fitBuddyRepository.equipments
-
-    var categoryFilterList: MutableList<Int> = mutableListOf()
-
-    override fun onCleared() {
-        super.onCleared()
-    }
-
-    fun onCategoryFilterChanged(categoryId: Int, checked: Boolean) {
-        if (checked) {
-            categoryFilterList.add(categoryId)
-        } else {
-            categoryFilterList.remove(categoryId)
-        }
-
-        exercises = if (categoryFilterList.size == 0) {
-            fitBuddyRepository.getExercises()
-        } else {
-            fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>)
-        }
-        _eventUpdateExerciseLiveDataObserver.value = true
-    }
-
-    fun eventUpdateExerciseLiveDataObserverDone() {
-        _eventUpdateExerciseLiveDataObserver.value = false
+    fun onNavigateToFilterDone() {
+        _navigateToFilter.value = false
     }
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {
@@ -60,4 +26,6 @@ class ExerciseSelectorViewModel(application: Application) : AndroidViewModel(app
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
+
+
 }

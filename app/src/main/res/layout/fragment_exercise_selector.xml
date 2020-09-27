@@ -10,51 +10,54 @@
             type="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseSelectorViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".mainactivityfragments.exerciseselector.ExerciseSelectorFragment">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".mainactivityfragments.exerciseselector.ExerciseSelectorFragment">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/spacing_small"
-                android:text="@string/categoryHeader"
-                android:textAppearance="?attr/textAppearanceBody1" />
 
             <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipview_category_filter_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="@dimen/spacing_normal" />
+                    android:padding="@dimen/spacing_small" />
 
             </HorizontalScrollView>
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/border_small"
+                android:background="@android:color/darker_gray" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_exercise_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="6"
+                tools:listitem="@layout/list_item_exercise" />
+
+
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/border_small"
-            android:background="@android:color/darker_gray" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_exercise_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="6"
-            tools:listitem="@layout/list_item_exercise" />
-
-    </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:srcCompat="@drawable/ic_filter_alt_white"
+            android:onClick="@{() -> viewModel.onFilterFabClicked()}"
+            android:layout_margin="@dimen/spacing_normal" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

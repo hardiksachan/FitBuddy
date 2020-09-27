@@ -7,11 +7,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.ListItemExerciseBinding
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
-import com.hardiksachan.fitbuddy.R
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
     ListAdapter<Exercise, ExerciseListAdapter.ViewHolder>(ExerciseDiffCallback()) {
@@ -22,7 +24,7 @@ class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
             fun from(parent: ViewGroup, parentLifecycleOwner: LifecycleOwner): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemExerciseBinding.inflate(layoutInflater, parent, false)
-                binding.lifecycleOwner =parentLifecycleOwner
+                binding.lifecycleOwner = parentLifecycleOwner
                 return ViewHolder(binding)
             }
         }
@@ -34,12 +36,20 @@ class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
             binding.exerciseItem = item
             binding.tvExerciseName.text = item.name
 
-            FitBuddyRepository(binding.root.context.applicationContext).getExerciseCategoryFromId(item.category)
+            FitBuddyRepository(binding.root.context.applicationContext).getExerciseCategoryFromId(
+                item.category
+            )
                 .observe(binding.lifecycleOwner!!, Observer {
                     binding.tvExerciseCategory.text =
                         binding.tvExerciseCategory.context.getString(R.string.category_format, it)
                 })
-            binding.tvExerciseEquipment.text = "Equipment: ${item.equipment}"
+            item.equipment.observe(binding.lifecycleOwner!!, Observer {
+                binding.tvExerciseEquipment.text = if (it.size > 0) {
+                    it[0].name
+                } else {
+                    "Not found"
+                }
+            })
         }
 
     }

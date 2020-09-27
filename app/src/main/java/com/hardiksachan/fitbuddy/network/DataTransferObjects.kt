@@ -3,6 +3,7 @@ package com.hardiksachan.fitbuddy.network
 import com.hardiksachan.fitbuddy.database.DatabaseEquipment
 import com.hardiksachan.fitbuddy.database.DatabaseExercise
 import com.hardiksachan.fitbuddy.database.DatabaseExerciseCategory
+import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import com.squareup.moshi.Json
 
 
@@ -80,8 +81,11 @@ data class NetworkEquipment(
     var name: String? = null
 )
 
-fun List<NetworkExercise>.asDatabaseModel(): Array<DatabaseExercise> {
+suspend fun List<NetworkExercise>.asDatabaseModel(repository: FitBuddyRepository): Array<DatabaseExercise> {
     return map {
+        repository.deleteAllEquipmentsOfExercise(it.id ?: throw Exception("Exercise must have Id"),)
+        repository.saveExerciseEquipment(it.equipment, it.id)
+
         DatabaseExercise(
             id = it.id ?: throw Exception("Exercise must have Id"),
             license_author = it.licenseAuthor ?: "",
@@ -92,12 +96,12 @@ fun List<NetworkExercise>.asDatabaseModel(): Array<DatabaseExercise> {
             language = it.language ?: -1,
             muscles = it.muscles?.toMutableList() ?: arrayListOf(),
             muscles_secondary = it.musclesSecondary?.toMutableList() ?: arrayListOf(),
-            equipment = it.equipment?.toMutableList() ?: arrayListOf()
         )
+
     }.toTypedArray()
 }
 
-fun List<NetworkExerciseCategory>.asDatabaseModel() : Array<DatabaseExerciseCategory> {
+fun List<NetworkExerciseCategory>.asDatabaseModel(): Array<DatabaseExerciseCategory> {
     return map {
         DatabaseExerciseCategory(
             id = it.id ?: throw Exception("Exercise Category must have Id"),

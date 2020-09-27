@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-private const val DATABASE_VERSION = 6
+private const val DATABASE_VERSION = 8
 
 @Dao
 interface ExerciseDao {
@@ -27,17 +27,29 @@ interface ExerciseDao {
     fun insertAllExerciseCategories(vararg exercises: DatabaseExerciseCategory)
 
     @Query("SELECT * from database_equipment")
-    fun getEquipments() : LiveData<List<DatabaseEquipment>>
+    fun getEquipments(): LiveData<List<DatabaseEquipment>>
 
     @Query("SELECT name from database_equipment WHERE id = :id")
     fun getEquipmentNameFromId(id: Int): LiveData<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllEquipments(vararg equipment: DatabaseEquipment)
+
+    @Query("SELECT * from database_equipment WHERE id in (SELECT equipmentId from database_exercise_equipment WHERE exerciseId = :exerciseId )")
+    fun getEquipmentsForExercise(exerciseId: Int): LiveData<List<DatabaseEquipment>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertEquipmentForExercise(vararg equipments : DatabaseExerciseEquipment)
+
+    @Query("DELETE FROM database_exercise_equipment WHERE exerciseId = :exerciseId")
+    fun clearEquipmentsForExercise(exerciseId: Int)
 }
 
 @Database(
-    entities = [DatabaseExercise::class, DatabaseExerciseCategory::class, DatabaseEquipment::class],
+    entities = [DatabaseExercise::class,
+        DatabaseExerciseCategory::class,
+        DatabaseEquipment::class,
+        DatabaseExerciseEquipment::class],
     version = DATABASE_VERSION,
     exportSchema = false
 )

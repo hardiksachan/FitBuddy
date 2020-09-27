@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/exerciseSelectorFragment">
 
     <fragment
         android:id="@+id/exerciseSelectorFragment"
         android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseSelectorFragment"
-        android:label="ExerciseSelectorFragment" />
+        android:label="ExerciseSelectorFragment">
+        <action
+            android:id="@+id/action_exerciseSelectorFragment_to_exerciseFilterFragment"
+            app:destination="@id/exerciseFilterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseFilterFragment"
+        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterFragment"
+        android:label="ExerciseFilterFragment">
+        <action
+            android:id="@+id/action_exerciseFilterFragment_to_exerciseSelectorFragment"
+            app:destination="@id/exerciseSelectorFragment"
+            app:popUpTo="@id/exerciseSelectorFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

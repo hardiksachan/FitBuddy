@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
+package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,16 +11,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.chip.Chip
 import com.hardiksachan.fitbuddy.R
-import com.hardiksachan.fitbuddy.databinding.FragmentExerciseSelectorBinding
+import com.hardiksachan.fitbuddy.databinding.FragmentExerciseFilterBinding
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
 
-class ExerciseSelectorFragment : Fragment() {
+class ExerciseFilterFragment : Fragment() {
 
-    val viewModel: ExerciseSelectorViewModel by lazy {
+    val viewModel: ExerciseFilterViewModel by lazy {
         val activity = requireNotNull(this.activity)
-        ViewModelProvider(this, ExerciseSelectorViewModel.Factory(activity.application))
-            .get(ExerciseSelectorViewModel::class.java)
+        ViewModelProvider(this, ExerciseFilterViewModel.Factory(activity.application))
+            .get(ExerciseFilterViewModel::class.java)
     }
 
     val sharedViewModel: MainActivitySharedViewModel by activityViewModels<MainActivitySharedViewModel> {
@@ -28,23 +28,23 @@ class ExerciseSelectorFragment : Fragment() {
         MainActivitySharedViewModel.Factory(activity.application)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = FragmentExerciseSelectorBinding.inflate(inflater, container, false)
+        val binding = FragmentExerciseFilterBinding.inflate(inflater, container, false)
+
         binding.viewModel = viewModel
-        val adapter = ExerciseListAdapter(viewLifecycleOwner)
-        binding.rvExerciseList.adapter = adapter
 
-
-        sharedViewModel.eventUpdateExerciseLiveDataObserver.observe(viewLifecycleOwner, Observer {
-            updateExerciseLiveDataBinding(adapter)
+        viewModel.navigateToSelector.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.root.findNavController()
+                    .navigate(
+                        ExerciseFilterFragmentDirections
+                            .actionExerciseFilterFragmentToExerciseSelectorFragment()
+                    )
+            }
         })
 
         sharedViewModel.exerciseCategories.observe(
@@ -53,7 +53,7 @@ class ExerciseSelectorFragment : Fragment() {
                 override fun onChanged(data: List<ExerciseCategory>?) {
                     data ?: return
 
-                    val chipGroup = binding.chipviewCategoryFilterList
+                    val chipGroup = binding.cvCategoryFilterList
                     val layoutInflater = LayoutInflater.from(chipGroup.context)
 
                     val children = data.map {
@@ -65,10 +65,7 @@ class ExerciseSelectorFragment : Fragment() {
                         chip.tag = it.id
                         chip.isChecked = chip.tag in sharedViewModel.categoryFilterList
                         chip.setOnCheckedChangeListener { button, isChecked ->
-                            sharedViewModel.onCategoryFilterChanged(
-                                button.tag as Int,
-                                isChecked
-                            )
+                            sharedViewModel.onCategoryFilterChanged(button.tag as Int, isChecked)
                         }
                         chip
                     }
@@ -78,25 +75,9 @@ class ExerciseSelectorFragment : Fragment() {
                         chipGroup.addView(chip)
                     }
                 }
+
             })
 
-        viewModel.navigateToFilter.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.root.findNavController()
-                    .navigate(
-                        ExerciseSelectorFragmentDirections
-                            .actionExerciseSelectorFragmentToExerciseFilterFragment()
-                    )
-                viewModel.onNavigateToFilterDone()
-            }
-        })
-
         return binding.root
-    }
-
-    private fun updateExerciseLiveDataBinding(adapter: ExerciseListAdapter) {
-        sharedViewModel.exercises?.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        })
     }
 }
