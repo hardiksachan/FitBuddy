@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.google.android.material.chip.Chip
 import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseSelectorBinding
-import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import timber.log.Timber
+
 
 class ExerciseSelectorFragment : Fragment() {
 
@@ -44,41 +45,22 @@ class ExerciseSelectorFragment : Fragment() {
 
 
         sharedViewModel.eventUpdateExerciseLiveDataObserver.observe(viewLifecycleOwner, Observer {
-            updateExerciseLiveDataBinding(adapter)
+            if (it) {
+                updateExerciseLiveDataBinding(adapter)
+                binding.chipActiveFilters.text = context?.getString(
+                    R.string.num_active_filters,
+                    sharedViewModel.getActiveFilters(null)
+                )
+                binding.btnClearFilters.setOnClickListener {
+                    sharedViewModel.clearFilters(null)
+                    binding.chipActiveFilters.text = context?.getString(
+                        R.string.num_active_filters,
+                        sharedViewModel.getActiveFilters(null)
+                    )
+                }
+            }
         })
 
-        sharedViewModel.exerciseCategories.observe(
-            viewLifecycleOwner,
-            object : Observer<List<ExerciseCategory>> {
-                override fun onChanged(data: List<ExerciseCategory>?) {
-                    data ?: return
-
-                    val chipGroup = binding.chipviewCategoryFilterList
-                    val layoutInflater = LayoutInflater.from(chipGroup.context)
-
-                    val children = data.map {
-                        val chip = layoutInflater.inflate(
-                            R.layout.filter_chip,
-                            chipGroup, false
-                        ) as Chip
-                        chip.text = it.name
-                        chip.tag = it.id
-                        chip.isChecked = chip.tag in sharedViewModel.categoryFilterList
-                        chip.setOnCheckedChangeListener { button, isChecked ->
-                            sharedViewModel.onCategoryFilterChanged(
-                                button.tag as Int,
-                                isChecked
-                            )
-                        }
-                        chip
-                    }
-                    chipGroup.removeAllViews()
-
-                    for (chip in children) {
-                        chipGroup.addView(chip)
-                    }
-                }
-            })
 
         viewModel.navigateToFilter.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -90,6 +72,22 @@ class ExerciseSelectorFragment : Fragment() {
                 viewModel.onNavigateToFilterDone()
             }
         })
+
+        binding.exerciseSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Timber.i("Query Changed: $newText")
+                sharedViewModel.searchFor(newText)
+                return false
+            }
+
+        })
+
+
 
         return binding.root
     }

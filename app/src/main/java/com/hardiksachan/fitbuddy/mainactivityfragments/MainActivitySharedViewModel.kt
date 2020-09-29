@@ -17,6 +17,7 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 
     var categoryFilterList: MutableList<Int> = mutableListOf()
     var equipmentFilterList: MutableList<Int> = mutableListOf()
+    var searchQuery: String? = "%"
 
     var exercises = fitBuddyRepository.getExercises()
     val exerciseCategories = fitBuddyRepository.exerciseCategories
@@ -43,19 +44,22 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     }
 
     private fun updateExercises() {
+
         exercises = if (categoryFilterList.size == 0 && equipmentFilterList.size == 0) {
-            fitBuddyRepository.getExercises()
+            fitBuddyRepository.getExercises(searchQuery = searchQuery)
         } else if (categoryFilterList.size != 0 && equipmentFilterList.size == 0) {
-            fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>)
+            fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>, searchQuery = searchQuery)
         } else if (categoryFilterList.size == 0 && equipmentFilterList.size != 0) {
-            fitBuddyRepository.getExercises(equipments = equipmentFilterList as List<Int>)
+            fitBuddyRepository.getExercises(equipments = equipmentFilterList as List<Int>, searchQuery = searchQuery)
         } else {
             fitBuddyRepository.getExercises(
                 categories = categoryFilterList,
-                equipments = equipmentFilterList as List<Int>
+                equipments = equipmentFilterList as List<Int>,
+                searchQuery = searchQuery
             )
         }
         _eventUpdateExerciseLiveDataObserver.value = true
+
     }
 
     fun onEquipmentFilterChanged(equipmentId: Int, checked: Boolean) {
@@ -88,8 +92,8 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
-    fun clearFilters(filterByWhat: FilterByWhat?){
-        if (filterByWhat == null){
+    fun clearFilters(filterByWhat: FilterByWhat?) {
+        if (filterByWhat == null) {
             equipmentFilterList.clear()
             categoryFilterList.clear()
         } else {
@@ -98,6 +102,12 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
                 FilterByWhat.Category -> categoryFilterList.clear()
             }
         }
+        updateExercises()
+    }
+
+    fun searchFor(newSearchQuery: String?) {
+        if (newSearchQuery == null) searchQuery = "%"
+        else searchQuery = "%$newSearchQuery%"
         updateExercises()
     }
 

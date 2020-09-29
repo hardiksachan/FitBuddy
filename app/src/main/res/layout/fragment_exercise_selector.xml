@@ -20,20 +20,53 @@
             android:orientation="vertical"
             tools:context=".mainactivityfragments.exerciseselector.ExerciseSelectorFragment">
 
-
-            <HorizontalScrollView
-                android:id="@+id/horizontalScrollView"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="vertical">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipview_category_filter_list"
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/exerciseSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:iconifiedByDefault="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_active_filters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_small" />
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:text="@string/num_active_filters"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_clear_filters"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/exerciseSearch" />
 
-            </HorizontalScrollView>
+                <Button
+                    android:id="@+id/btn_clear_filters"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_normal"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:text="Clear all"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/chip_active_filters"
+                    app:layout_constraintTop_toBottomOf="@+id/exerciseSearch" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <include layout="@layout/horizontal_divider" />
@@ -53,8 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            app:srcCompat="@drawable/ic_filter_alt_white"
+            android:layout_margin="@dimen/spacing_normal"
             android:onClick="@{() -> viewModel.onFilterFabClicked()}"
-            android:layout_margin="@dimen/spacing_normal" />
+            app:srcCompat="@drawable/ic_filter_alt_white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

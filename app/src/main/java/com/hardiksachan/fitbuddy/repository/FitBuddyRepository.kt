@@ -19,21 +19,22 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     private val database = getDatabase(applicationContext)
 
-    fun getExercises(categories: List<Int>? = null, equipments: List<Int>? = null): LiveData<List<Exercise>>? {
+    fun getExercises(searchQuery: String? = "%" ,categories: List<Int>? = null, equipments: List<Int>? = null): LiveData<List<Exercise>>? {
+        val searchQuery = searchQuery ?: "%"
         return if (categories == null && equipments == null) {
-            Transformations.map(database.exerciseDao.getExercises()) {
+            Transformations.map(database.exerciseDao.getExercises(searchQuery)) {
                 it.asDomainModel(this)
             }
         } else if (categories != null && equipments == null){
-            Transformations.map(database.exerciseDao.getExercises(categories)) {
+            Transformations.map(database.exerciseDao.getExercises(categories = categories, searchText = searchQuery)) {
                 it.asDomainModel(this)
             }
         } else if (categories == null && equipments != null){
-            Transformations.map(database.exerciseDao.getExercisesUsingEquipment(equipments)) {
+            Transformations.map(database.exerciseDao.getExercisesUsingEquipment(equipments = equipments, searchText = searchQuery)) {
                 it.asDomainModel(this)
             }
         } else {
-            Transformations.map(database.exerciseDao.getExercises(categories = categories!!,equipments = equipments!!)) {
+            Transformations.map(database.exerciseDao.getExercises(categories = categories!!,equipments = equipments!!, searchText = searchQuery)) {
                 it.asDomainModel(this)
             }
         }

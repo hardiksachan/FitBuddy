@@ -6,19 +6,23 @@ import androidx.room.*
 
 private const val DATABASE_VERSION = 8
 
+private const val SEARCH_QUERY = "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText))"
+
 @Dao
 interface ExerciseDao {
-    @Query("SELECT * from database_exercise")
-    fun getExercises(): LiveData<List<DatabaseExercise>>
 
-    @Query("SELECT * from database_exercise WHERE category IN (:categories)")
-    fun getExercises(categories: List<Int>): LiveData<List<DatabaseExercise>>
+    @Query("SELECT * from database_exercise WHERE $SEARCH_QUERY")
+    fun getExercises(searchText: String): LiveData<List<DatabaseExercise>>
 
-    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author, ex.muscles, ex.muscles_secondary, ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) ")
-    fun getExercisesUsingEquipment(equipments: List<Int>): LiveData<List<DatabaseExercise>>
+    @Query("SELECT * from database_exercise WHERE category IN (:categories) AND $SEARCH_QUERY")
+    fun getExercises(categories: List<Int>, searchText: String): LiveData<List<DatabaseExercise>>
 
-    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author, ex.muscles, ex.muscles_secondary, ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND ex.category IN (:categories) ")
-    fun getExercises(equipments: List<Int>, categories: List<Int>): LiveData<List<DatabaseExercise>>
+
+    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author, ex.muscles, ex.muscles_secondary, ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND $SEARCH_QUERY")
+    fun getExercisesUsingEquipment(equipments: List<Int>, searchText: String): LiveData<List<DatabaseExercise>>
+
+    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author, ex.muscles, ex.muscles_secondary, ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND ex.category IN (:categories) AND $SEARCH_QUERY")
+    fun getExercises(equipments: List<Int>, categories: List<Int>, searchText: String): LiveData<List<DatabaseExercise>>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
