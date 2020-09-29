@@ -2,6 +2,7 @@ package com.hardiksachan.fitbuddy.database
 
 import androidx.lifecycle.Transformations
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.hardiksachan.fitbuddy.domain.Equipment
 import com.hardiksachan.fitbuddy.domain.Exercise
@@ -42,7 +43,15 @@ data class DatabaseMuscle constructor(
     val name: String
 )
 
-@Entity(tableName = "database_exercise_equipment")
+@Entity(
+    tableName = "database_exercise_equipment",
+    foreignKeys = [ForeignKey(
+        entity = DatabaseExercise::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("exerciseId"),
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class DatabaseExerciseEquipment constructor(
 
     @PrimaryKey(autoGenerate = true)
@@ -51,7 +60,13 @@ data class DatabaseExerciseEquipment constructor(
     val exerciseId: Int
 )
 
-@Entity(tableName = "database_exercise_muscle")
+@Entity(tableName = "database_exercise_muscle",
+    foreignKeys = [ForeignKey(
+        entity = DatabaseExercise::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("exerciseId"),
+        onDelete = ForeignKey.CASCADE
+    )])
 data class DatabaseExerciseMuscle constructor(
 
     @PrimaryKey(autoGenerate = true)

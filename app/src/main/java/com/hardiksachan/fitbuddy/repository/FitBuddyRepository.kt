@@ -3,6 +3,7 @@ package com.hardiksachan.fitbuddy.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.Transformations.map
 import com.hardiksachan.fitbuddy.database.DatabaseExerciseEquipment
 import com.hardiksachan.fitbuddy.database.DatabaseExerciseMuscle
 import com.hardiksachan.fitbuddy.database.asDomainModel
@@ -145,6 +146,18 @@ class FitBuddyRepository(private val applicationContext: Context) {
                     refreshExercises(offset = offset + limit, limit = limit)
                 }
                 Timber.i("Saved exercises to db")
+
+                Timber.i("Saving Equipments and muscles to db")
+                exerciseResponse.results!!.forEach {
+                    val repository = this@FitBuddyRepository
+                    repository.deleteAllEquipmentsOfExercise(it.id ?: throw Exception("Exercise must have Id"))
+                    repository.saveExerciseEquipment(it.equipment, it.id)
+
+                    repository.deleteAllMusclesOfExercise(it.id ?: throw Exception("Exercise must have Id"))
+                    repository.saveExerciseMuscle(it.muscles, it.id, false)
+                    repository.saveExerciseMuscle(it.musclesSecondary, it.id, true)
+                }
+                Timber.i("Saved Equipments and muscles to db")
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }

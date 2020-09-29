@@ -95,12 +95,6 @@ data class NetworkMuscle(
 
 suspend fun List<NetworkExercise>.asDatabaseModel(repository: FitBuddyRepository): Array<DatabaseExercise> {
     return map {
-        repository.deleteAllEquipmentsOfExercise(it.id ?: throw Exception("Exercise must have Id"))
-        repository.saveExerciseEquipment(it.equipment, it.id)
-
-        repository.deleteAllMusclesOfExercise(it.id ?: throw Exception("Exercise must have Id"))
-        repository.saveExerciseMuscle(it.muscles, it.id, false)
-        repository.saveExerciseMuscle(it.musclesSecondary, it.id, true)
 
         DatabaseExercise(
             id = it.id ?: throw Exception("Exercise must have Id"),

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-private const val DATABASE_VERSION = 11
+private const val DATABASE_VERSION = 12
 
 private const val SEARCH_QUERY =
     "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText)) ORDER BY name"
