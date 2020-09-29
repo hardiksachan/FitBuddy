@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseinfo
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseinfo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseDetailBinding
-import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 
 class ExerciseDetailFragment : Fragment() {
 

@@ -11,4 +11,5 @@
     <string name="num_active_filter_long">%d Active Filters</string>
     <string name="none_item">None</string>
     <string name="no_results_found">No Results Found</string>
+    <string name="num_results_found">%d Results</string>
 </resources>

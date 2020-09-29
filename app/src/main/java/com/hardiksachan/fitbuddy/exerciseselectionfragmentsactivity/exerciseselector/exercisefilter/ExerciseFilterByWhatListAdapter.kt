@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.RecylerviewItemCardFilterTypeBinding
-import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 
 class ExerciseFilterByWhatListAdapter(
     private val parentLifecycleOwner: LifecycleOwner,

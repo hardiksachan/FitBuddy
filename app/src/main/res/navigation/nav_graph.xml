@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/exerciseSelectorFragment"
-        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseSelectorFragment"
+        android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.ExerciseSelectorFragment"
         android:label="ExerciseSelectorFragment">
         <action
             android:id="@+id/action_exerciseSelectorFragment_to_exerciseFilterFragment"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/exerciseFilterFragment"
-        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterByWhatFragment"
+        android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.ExerciseFilterByWhatFragment"
         android:label="ExerciseFilterFragment">
         <action
             android:id="@+id/action_exerciseFilterFragment_to_exerciseSelectorFragment"
@@ -30,18 +30,18 @@
     </fragment>
     <fragment
         android:id="@+id/exerciseFilterSpecificFragment"
-        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterSpecificFragment"
+        android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.ExerciseFilterSpecificFragment"
         android:label="ExerciseFilterSpecificFragment" >
         <argument
             android:name="filterBy"
-            app:argType="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.FilterByWhat" />
+            app:argType="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.FilterByWhat" />
         <action
             android:id="@+id/action_exerciseFilterSpecificFragment_to_exerciseFilterFragment"
             app:destination="@id/exerciseFilterFragment" />
     </fragment>
     <fragment
         android:id="@+id/exerciseDetailFragment"
-        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseinfo.ExerciseDetailFragment"
+        android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseinfo.ExerciseDetailFragment"
         android:label="ExerciseDetailFragment" >
         <action
             android:id="@+id/action_exerciseDetailFragment_to_exerciseSelectorFragment"

@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,24 +8,24 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.hardiksachan.fitbuddy.databinding.RecyclerviewItemExerciseCategoryFilterBinding
-import com.hardiksachan.fitbuddy.domain.ExerciseCategory
-import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import com.hardiksachan.fitbuddy.domain.Equipment
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 
-class ExerciseCategoryFilterListAdapter(
+class ExerciseEquipmentFilterListAdapter(
     private val parentLifecycleOwner: LifecycleOwner,
     private val sharedViewModel: MainActivitySharedViewModel
 ) :
-    ListAdapter<ExerciseCategory, ExerciseCategoryFilterListAdapter.ViewHolder>(ExerciseFilterDiffCallback()) {
+    ListAdapter<Equipment, ExerciseEquipmentFilterListAdapter.ViewHolder>(ExerciseEquipmentFilterDiffCallback()) {
     class ViewHolder private constructor(private val binding: RecyclerviewItemExerciseCategoryFilterBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ExerciseCategory, sharedViewModel: MainActivitySharedViewModel) {
+        fun bind(item: Equipment, sharedViewModel: MainActivitySharedViewModel) {
             binding.checkBoxCategoryFilter.text = item.name
             binding.checkBoxCategoryFilter.tag = item.id
-            binding.checkBoxCategoryFilter.isChecked = item.id in sharedViewModel.categoryFilterList
+            binding.checkBoxCategoryFilter.isChecked = item.id in sharedViewModel.equipmentFilterList
 
             binding.checkBoxCategoryFilter.setOnClickListener {
                 it as MaterialCheckBox
-                sharedViewModel.onCategoryFilterChanged(
+                sharedViewModel.onEquipmentFilterChanged(
                     it.tag as Int,
                     it.isChecked
                 )
@@ -57,12 +57,12 @@ class ExerciseCategoryFilterListAdapter(
     }
 }
 
-class ExerciseFilterDiffCallback : DiffUtil.ItemCallback<ExerciseCategory>() {
-    override fun areItemsTheSame(oldItem: ExerciseCategory, newItem: ExerciseCategory): Boolean {
+class ExerciseEquipmentFilterDiffCallback : DiffUtil.ItemCallback<Equipment>() {
+    override fun areItemsTheSame(oldItem: Equipment, newItem: Equipment): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: ExerciseCategory, newItem: ExerciseCategory): Boolean {
+    override fun areContentsTheSame(oldItem: Equipment, newItem: Equipment): Boolean {
         return oldItem.id == oldItem.id
     }
 

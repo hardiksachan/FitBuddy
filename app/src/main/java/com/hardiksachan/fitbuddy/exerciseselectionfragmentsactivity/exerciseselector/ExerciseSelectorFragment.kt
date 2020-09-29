@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +10,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseSelectorBinding
-import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 import timber.log.Timber
+import java.lang.Exception
 
 
 class ExerciseSelectorFragment : Fragment() {
@@ -39,7 +41,6 @@ class ExerciseSelectorFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentExerciseSelectorBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         val adapter = ExerciseListAdapter(viewLifecycleOwner, ExerciseListAdapter.OnClickListener {
@@ -48,8 +49,16 @@ class ExerciseSelectorFragment : Fragment() {
         })
         binding.rvExerciseList.adapter = adapter
 
+        try{
+            val layoutmanager = binding.rvExerciseList.layoutManager as LinearLayoutManager
+            val selectedItem = sharedViewModel.getExerciseToDisplayOnDetail()
+            layoutmanager.scrollToPositionWithOffset(sharedViewModel.exercises?.value?.indexOf(selectedItem) ?: 0, 0)
+        } catch (e: Exception) {
+            Timber.e(e.stackTraceToString())
+        }
 
-        sharedViewModel.eventUpdateExerciseLiveDataObserver.observe(viewLifecycleOwner, Observer {
+
+        sharedViewModel.eventUpdateExerciseLiveDataObserver.observe(viewLifecycleOwner, {
             if (it) {
                 updateExerciseLiveDataBinding(adapter)
                 binding.chipActiveFilters.text = context?.getString(
@@ -67,7 +76,7 @@ class ExerciseSelectorFragment : Fragment() {
         })
 
 
-        viewModel.navigateToFilter.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToFilter.observe(viewLifecycleOwner, {
             if (it) {
                 binding.root.findNavController()
                     .navigate(
@@ -78,7 +87,7 @@ class ExerciseSelectorFragment : Fragment() {
             }
         })
 
-        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToDetail.observe(viewLifecycleOwner, {
             if (it) {
                 binding.root.findNavController()
                     .navigate(
@@ -103,13 +112,13 @@ class ExerciseSelectorFragment : Fragment() {
         })
 
 
-
         return binding.root
     }
 
     private fun updateExerciseLiveDataBinding(adapter: ExerciseListAdapter) {
         sharedViewModel.exercises?.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+            binding.tvResultsFound.text = binding.root.context.getString(R.string.num_results_found, it.size)
             binding.noResultsFoundLayout.visibility = if (it.isEmpty()) {
                 View.VISIBLE
             } else {

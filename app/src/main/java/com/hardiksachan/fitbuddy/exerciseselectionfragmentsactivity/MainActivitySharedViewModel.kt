@@ -1,9 +1,9 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity
 
 import android.app.Application
 import androidx.lifecycle.*
 import com.hardiksachan.fitbuddy.domain.Exercise
-import com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.FilterByWhat
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.FilterByWhat
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber

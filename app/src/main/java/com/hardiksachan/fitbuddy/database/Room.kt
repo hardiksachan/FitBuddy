@@ -7,7 +7,7 @@ import androidx.room.*
 private const val DATABASE_VERSION = 11
 
 private const val SEARCH_QUERY =
-    "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText))"
+    "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText)) ORDER BY name"
 
 @Dao
 interface ExerciseDao {

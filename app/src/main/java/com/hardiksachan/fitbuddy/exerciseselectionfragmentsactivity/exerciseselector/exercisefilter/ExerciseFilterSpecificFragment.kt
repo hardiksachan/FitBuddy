@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseFilterSpecificBinding
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
-import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
-import timber.log.Timber
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 
 class ExerciseFilterSpecificFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseFilterByWhatBinding
-import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 
 enum class FilterByWhat(val type: String) {
     Category("Category"),

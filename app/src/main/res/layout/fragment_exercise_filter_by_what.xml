@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterByWhatViewModel" />
+            type="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.ExerciseFilterByWhatViewModel" />
     </data>
 
 

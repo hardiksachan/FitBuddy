@@ -1,7 +1,6 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseinfo
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseinfo
 
 import android.text.Html
-import android.transition.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.hardiksachan.fitbuddy.databinding.Viewpager2ItemExerciseDetailBinding
 import com.hardiksachan.fitbuddy.domain.Equipment
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.domain.Muscle
-import com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseDiffCallback
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.ExerciseDiffCallback
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +55,7 @@ class ExerciseDetailViewPagerAdapter(val parentLifecycleOwner: LifecycleOwner) :
                     val chipGroup = binding.chipGroupEquipments
                     val inflator = LayoutInflater.from(chipGroup.context)
 
-                    if (data == null) {
+                    if (data == null || data.isEmpty()) {
                         chipGroup.removeAllViews()
                         val chip = inflator.inflate(R.layout.simple_chip, chipGroup, false) as Chip
                         chip.text = binding.root.context.getString(R.string.none_item)
@@ -85,7 +84,7 @@ class ExerciseDetailViewPagerAdapter(val parentLifecycleOwner: LifecycleOwner) :
                     val chipGroup = binding.chipGroupPrimaryMuscles
                     val inflator = LayoutInflater.from(chipGroup.context)
 
-                    if (data == null) {
+                    if (data == null || data.isEmpty()) {
                         chipGroup.removeAllViews()
                         val chip = inflator.inflate(R.layout.simple_chip, chipGroup, false) as Chip
                         chip.text = binding.root.context.getString(R.string.none_item)
@@ -110,44 +109,43 @@ class ExerciseDetailViewPagerAdapter(val parentLifecycleOwner: LifecycleOwner) :
 
             item.muscles_secondary.observe(
                 binding.lifecycleOwner!!,
-                object : Observer<List<Muscle>> {
-                    override fun onChanged(data: List<Muscle>?) {
-                        val chipGroup = binding.chipGroupSecondaryMuscles
-                        val inflator = LayoutInflater.from(chipGroup.context)
+                { data ->
+                    val chipGroup = binding.chipGroupSecondaryMuscles
+                    val inflator = LayoutInflater.from(chipGroup.context)
 
-                        if (data == null) {
-                            chipGroup.removeAllViews()
+                    if (data == null || data.isEmpty() ) {
+                        chipGroup.removeAllViews()
+                        val chip =
+                            inflator.inflate(R.layout.simple_chip, chipGroup, false) as Chip
+                        chip.text = binding.root.context.getString(R.string.none_item)
+                        chipGroup.addView(chip)
+                    } else {
+
+                        val children = data.map {
                             val chip =
                                 inflator.inflate(R.layout.simple_chip, chipGroup, false) as Chip
-                            chip.text = binding.root.context.getString(R.string.none_item)
+                            chip.text = it.name
+                            chip
+                        }
+
+                        chipGroup.removeAllViews()
+
+                        for (chip in children) {
                             chipGroup.addView(chip)
-                        } else {
-
-                            val children = data.map {
-                                val chip =
-                                    inflator.inflate(R.layout.simple_chip, chipGroup, false) as Chip
-                                chip.text = it.name
-                                chip
-                            }
-
-                            chipGroup.removeAllViews()
-
-                            for (chip in children) {
-                                chipGroup.addView(chip)
-                            }
                         }
                     }
                 })
 
-            if (item.description == ""){
+            if (item.description == "") {
                 binding.wvDescription.visibility = View.GONE
             } else {
                 binding.wvDescription.visibility = View.VISIBLE
-                binding.wvDescription.text = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    Html.fromHtml(item.description,Html.FROM_HTML_MODE_LEGACY)
-                } else {
-                   Html.fromHtml(item.description)
-                }
+                binding.wvDescription.text =
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        Html.fromHtml(item.description, Html.FROM_HTML_MODE_LEGACY)
+                    } else {
+                        Html.fromHtml(item.description)
+                    }
             }
         }
 

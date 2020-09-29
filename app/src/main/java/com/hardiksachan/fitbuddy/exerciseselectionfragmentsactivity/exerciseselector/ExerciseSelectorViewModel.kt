@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
+package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector
 
 import android.app.Application
 import androidx.lifecycle.*

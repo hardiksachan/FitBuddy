@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseSelectorViewModel" />
+            type="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.ExerciseSelectorViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context=".mainactivityfragments.exerciseselector.ExerciseSelectorFragment">
+            tools:context=".exerciseselectionfragmentsactivity.exerciseselector.ExerciseSelectorFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -33,37 +33,48 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_active_filters"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="@dimen/spacing_small"
-                    android:layout_marginBottom="@dimen/spacing_small"
-                    android:text="@string/num_active_filter_long"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_clear_filters"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/exerciseSearch" />
+                </androidx.appcompat.widget.SearchView>
 
                 <Button
                     android:id="@+id/btn_clear_filters"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="@dimen/spacing_normal"
-                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_small"
                     android:text="@string/clear_all"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/chip_active_filters"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/chip_active_filters" />
+
+                <TextView
+                    android:id="@+id/tv_results_found"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_normal"
+                    android:gravity="center"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/chip_active_filters"
+                    app:layout_constraintEnd_toStartOf="@+id/chip_active_filters"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/chip_active_filters"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_active_filters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:text="@string/num_active_filter_long"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_clear_filters"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tv_results_found"
                     app:layout_constraintTop_toBottomOf="@+id/exerciseSearch" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -81,27 +92,27 @@
 
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/no_results_found_layout"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_height="match_parent">
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".7"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_error_white_18dp"
-                    app:tint="?attr/colorControlHighlight"
-                    android:scaleType="fitCenter"/>
+                    app:tint="?attr/colorControlHighlight" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".3"
                     android:gravity="center"
-                    android:textAppearance="?attr/textAppearanceSearchResultTitle"
-                    android:text="@string/no_results_found"/>
+                    android:text="@string/no_results_found"
+                    android:textAppearance="?attr/textAppearanceSearchResultTitle" />
 
             </LinearLayout>
 
