@@ -9,49 +9,41 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.hardiksachan.fitbuddy.databinding.FragmentExerciseFilterBinding
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
+import com.hardiksachan.fitbuddy.databinding.FragmentExerciseFilterSpecificBinding
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
 import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
+import timber.log.Timber
 
-class ExerciseFilterFragment : Fragment() {
-
-    val viewModel: ExerciseFilterViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(this, ExerciseFilterViewModel.Factory(activity.application))
-            .get(ExerciseFilterViewModel::class.java)
-    }
+class ExerciseFilterSpecificFragment : Fragment() {
 
     val sharedViewModel: MainActivitySharedViewModel by activityViewModels<MainActivitySharedViewModel> {
         val activity = requireNotNull(this.activity)
         MainActivitySharedViewModel.Factory(activity.application)
     }
 
+    val viewModel: ExerciseFilterSpecificViewModel by lazy {
+        val activity = requireNotNull(this.activity)
+        ViewModelProvider(this, ExerciseFilterSpecificViewModel.Factory(activity.application))
+            .get(ExerciseFilterSpecificViewModel::class.java)
+    }
+
+    val arguments: ExerciseFilterSpecificFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = FragmentExerciseFilterBinding.inflate(inflater, container, false)
+        val binding = FragmentExerciseFilterSpecificBinding.inflate(inflater)
 
-        binding.viewModel = viewModel
-
-        viewModel.navigateToSelector.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.root.findNavController()
-                    .navigate(
-                        ExerciseFilterFragmentDirections
-                            .actionExerciseFilterFragmentToExerciseSelectorFragment()
-                    )
-            }
-        })
 
         val categoryFilterListAdapter =
             ExerciseCategoryFilterListAdapter(viewLifecycleOwner, sharedViewModel)
-        binding.rvCategoryFilter.adapter = categoryFilterListAdapter
 
         val equipmentFilterListAdapter =
             ExerciseEquipmentFilterListAdapter(viewLifecycleOwner, sharedViewModel)
-        binding.rvEquipmentFilter.adapter = equipmentFilterListAdapter
 
         sharedViewModel.exerciseCategories.observe(
             viewLifecycleOwner, Observer<List<ExerciseCategory>> {
@@ -63,6 +55,13 @@ class ExerciseFilterFragment : Fragment() {
                 equipmentFilterListAdapter.submitList(it)
             }
         )
+
+        binding.tvSpecificFilterName.text = arguments.filterBy.type
+
+        binding.rvSpecificFilter.adapter = when (arguments.filterBy) {
+            FilterByWhat.Category -> categoryFilterListAdapter
+            FilterByWhat.Equipment -> equipmentFilterListAdapter
+        }
 
         return binding.root
     }

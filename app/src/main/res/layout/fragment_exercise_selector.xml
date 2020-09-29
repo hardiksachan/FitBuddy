@@ -36,10 +36,7 @@
             </HorizontalScrollView>
 
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/border_small"
-                android:background="@android:color/darker_gray" />
+            <include layout="@layout/horizontal_divider" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_exercise_list"

@@ -2,12 +2,12 @@ package com.hardiksachan.fitbuddy.mainactivityfragments
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.ExerciseSelectorViewModel
+import com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.FilterByWhat
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class MainActivitySharedViewModel(application: Application) : AndroidViewModel(application){
+class MainActivitySharedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _eventUpdateExerciseLiveDataObserver = MutableLiveData<Boolean>()
     val eventUpdateExerciseLiveDataObserver: LiveData<Boolean>
@@ -47,10 +47,13 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
             fitBuddyRepository.getExercises()
         } else if (categoryFilterList.size != 0 && equipmentFilterList.size == 0) {
             fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>)
-        } else if (categoryFilterList.size == 0 && equipmentFilterList.size != 0){
+        } else if (categoryFilterList.size == 0 && equipmentFilterList.size != 0) {
             fitBuddyRepository.getExercises(equipments = equipmentFilterList as List<Int>)
         } else {
-            fitBuddyRepository.getExercises(categories = categoryFilterList, equipments = equipmentFilterList as List<Int>)
+            fitBuddyRepository.getExercises(
+                categories = categoryFilterList,
+                equipments = equipmentFilterList as List<Int>
+            )
         }
         _eventUpdateExerciseLiveDataObserver.value = true
     }
@@ -71,6 +74,18 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 
     fun eventUpdateExerciseLiveDataObserverDone() {
         _eventUpdateExerciseLiveDataObserver.value = false
+    }
+
+    fun getActiveFilters(filterByWhat: FilterByWhat?): Int {
+        return if (filterByWhat == null) {
+            (equipmentFilterList.size +
+                    categoryFilterList.size)
+        } else {
+            when (filterByWhat) {
+                FilterByWhat.Equipment -> equipmentFilterList.size
+                FilterByWhat.Category -> categoryFilterList.size
+            }
+        }
     }
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {

@@ -21,5 +21,19 @@
             app:destination="@id/exerciseSelectorFragment"
             app:popUpTo="@id/exerciseSelectorFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_exerciseFilterFragment_to_exerciseFilterSpecificFragment"
+            app:destination="@id/exerciseFilterSpecificFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseFilterSpecificFragment"
+        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterSpecificFragment"
+        android:label="ExerciseFilterSpecificFragment" >
+        <argument
+            android:name="filterBy"
+            app:argType="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.FilterByWhat" />
+        <action
+            android:id="@+id/action_exerciseFilterSpecificFragment_to_exerciseFilterFragment"
+            app:destination="@id/exerciseFilterFragment" />
     </fragment>
 </navigation>
