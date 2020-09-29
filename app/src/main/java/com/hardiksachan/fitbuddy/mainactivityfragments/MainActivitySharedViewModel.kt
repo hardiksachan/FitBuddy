@@ -25,6 +25,7 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 
     init {
         viewModelScope.launch {
+            fitBuddyRepository.refreshMuscles()
             fitBuddyRepository.refreshEquipments()
             fitBuddyRepository.refreshExerciseCategories()
             fitBuddyRepository.refreshExercises()

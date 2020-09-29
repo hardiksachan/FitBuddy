@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import com.hardiksachan.fitbuddy.domain.Equipment
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
+import com.hardiksachan.fitbuddy.domain.Muscle
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 
 @Entity(tableName = "database_exercise")
@@ -17,9 +18,7 @@ data class DatabaseExercise constructor(
     val description: String,
     val name: String,
     val category: Int,
-    val language: Int,
-    val muscles: MutableList<Int>,
-    val muscles_secondary: MutableList<Int>
+    val language: Int
 )
 
 @Entity(tableName = "database_exercise_category")
@@ -36,6 +35,13 @@ data class DatabaseEquipment constructor(
     val name: String
 )
 
+@Entity(tableName = "database_muscle")
+data class DatabaseMuscle constructor(
+    @PrimaryKey
+    val id: Int,
+    val name: String
+)
+
 @Entity(tableName = "database_exercise_equipment")
 data class DatabaseExerciseEquipment constructor(
 
@@ -43,6 +49,16 @@ data class DatabaseExerciseEquipment constructor(
     val id: Int = 0,
     val equipmentId: Int,
     val exerciseId: Int
+)
+
+@Entity(tableName = "database_exercise_muscle")
+data class DatabaseExerciseMuscle constructor(
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val muscleId: Int,
+    val exerciseId: Int,
+    val isSecondary: Boolean
 )
 
 @JvmName("asDomainModelDatabaseExercise")
@@ -56,8 +72,12 @@ fun List<DatabaseExercise>.asDomainModel(repository: FitBuddyRepository): List<E
             name = it.name,
             category = it.category,
             language = it.language,
-            muscles = it.muscles,
-            muscles_secondary = it.muscles_secondary,
+            muscles = Transformations.map(repository.getPrimaryMuscleFromExercise(it.id)) { dbMuscleList ->
+                dbMuscleList.asDomainModel()
+            },
+            muscles_secondary = Transformations.map(repository.getSecondaryMuscleFromExercise(it.id)) { dbMuscleList ->
+                dbMuscleList.asDomainModel()
+            },
             equipment = Transformations.map(repository.getEquipmentsFromExercise(it.id)) { dbEquipmentList ->
                 dbEquipmentList.asDomainModel()
             }
@@ -79,6 +99,17 @@ fun List<DatabaseExerciseCategory>.asDomainModel(): List<ExerciseCategory> {
 fun List<DatabaseEquipment>.asDomainModel(): List<Equipment> {
     return map {
         Equipment(
+            id = it.id,
+            name = it.name
+        )
+    }
+}
+
+
+@JvmName("asDomainModelDatabaseMuscle")
+fun List<DatabaseMuscle>.asDomainModel(): List<Muscle> {
+    return map {
+        Muscle(
             id = it.id,
             name = it.name
         )

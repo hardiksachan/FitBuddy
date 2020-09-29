@@ -48,13 +48,13 @@ class ExerciseSelectorFragment : Fragment() {
             if (it) {
                 updateExerciseLiveDataBinding(adapter)
                 binding.chipActiveFilters.text = context?.getString(
-                    R.string.num_active_filters,
+                    R.string.num_active_filter_long,
                     sharedViewModel.getActiveFilters(null)
                 )
                 binding.btnClearFilters.setOnClickListener {
                     sharedViewModel.clearFilters(null)
                     binding.chipActiveFilters.text = context?.getString(
-                        R.string.num_active_filters,
+                        R.string.num_active_filter_long,
                         sharedViewModel.getActiveFilters(null)
                     )
                 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.hardiksachan.fitbuddy.database.DatabaseExerciseEquipment
+import com.hardiksachan.fitbuddy.database.DatabaseExerciseMuscle
 import com.hardiksachan.fitbuddy.database.asDomainModel
 import com.hardiksachan.fitbuddy.database.getDatabase
 import com.hardiksachan.fitbuddy.domain.Equipment
@@ -19,22 +20,42 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     private val database = getDatabase(applicationContext)
 
-    fun getExercises(searchQuery: String? = "%" ,categories: List<Int>? = null, equipments: List<Int>? = null): LiveData<List<Exercise>>? {
+    fun getExercises(
+        searchQuery: String? = "%",
+        categories: List<Int>? = null,
+        equipments: List<Int>? = null
+    ): LiveData<List<Exercise>>? {
         val searchQuery = searchQuery ?: "%"
         return if (categories == null && equipments == null) {
             Transformations.map(database.exerciseDao.getExercises(searchQuery)) {
                 it.asDomainModel(this)
             }
-        } else if (categories != null && equipments == null){
-            Transformations.map(database.exerciseDao.getExercises(categories = categories, searchText = searchQuery)) {
+        } else if (categories != null && equipments == null) {
+            Transformations.map(
+                database.exerciseDao.getExercises(
+                    categories = categories,
+                    searchText = searchQuery
+                )
+            ) {
                 it.asDomainModel(this)
             }
-        } else if (categories == null && equipments != null){
-            Transformations.map(database.exerciseDao.getExercisesUsingEquipment(equipments = equipments, searchText = searchQuery)) {
+        } else if (categories == null && equipments != null) {
+            Transformations.map(
+                database.exerciseDao.getExercisesUsingEquipment(
+                    equipments = equipments,
+                    searchText = searchQuery
+                )
+            ) {
                 it.asDomainModel(this)
             }
         } else {
-            Transformations.map(database.exerciseDao.getExercises(categories = categories!!,equipments = equipments!!, searchText = searchQuery)) {
+            Transformations.map(
+                database.exerciseDao.getExercises(
+                    categories = categories!!,
+                    equipments = equipments!!,
+                    searchText = searchQuery
+                )
+            ) {
                 it.asDomainModel(this)
             }
         }
@@ -54,10 +75,20 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     fun getEquipmentFromId(id: Int) = database.exerciseDao.getEquipmentNameFromId(id)
 
-    fun deleteAllEquipmentsOfExercise(exerciseId: Int) = database.exerciseDao.clearEquipmentsForExercise(exerciseId)
+    fun deleteAllEquipmentsOfExercise(exerciseId: Int) =
+        database.exerciseDao.clearEquipmentsForExercise(exerciseId)
 
     fun getEquipmentsFromExercise(exerciseId: Int) =
         database.exerciseDao.getEquipmentsForExercise(exerciseId)
+
+    fun getPrimaryMuscleFromExercise(exerciseId: Int) =
+        database.exerciseDao.getMusclesForExercise(exerciseId, false)
+
+    fun getSecondaryMuscleFromExercise(exerciseId: Int) =
+        database.exerciseDao.getMusclesForExercise(exerciseId, true)
+
+    fun deleteAllMusclesOfExercise(exerciseId: Int) =
+        database.exerciseDao.clearMusclesForExercise(exerciseId)
 
     suspend fun saveExerciseEquipment(equipment: List<Int>?, id: Int?) {
         equipment ?: return
@@ -76,17 +107,43 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     }
 
-    suspend fun refreshExercises() {
+    suspend fun saveExerciseMuscle(muscle: List<Int>?, id: Int?, isSecondary: Boolean) {
+        muscle ?: return
+        id ?: return
+
+        muscle.map {
+            withContext(Dispatchers.IO) {
+                database.exerciseDao.insertMuscleForExercise(
+                    DatabaseExerciseMuscle(
+                        muscleId = it,
+                        exerciseId = id,
+                        isSecondary = isSecondary
+                    )
+                )
+            }
+        }
+
+    }
+
+    suspend fun refreshExercises(offset: Int = 0, limit: Int = 1000) {
         withContext(Dispatchers.IO) {
             try {
                 Timber.i("Started to look for exercises")
-                val exerciseResponse = WgerApi.retrofitService.getExercises(2, 2).await()
+                val exerciseResponse = WgerApi.retrofitService.getExercises(
+                    language = 2,
+                    status = 2,
+                    limit = limit,
+                    offset = offset
+                ).await()
                 Timber.i("${exerciseResponse.results!!.size} exercises fetched")
                 database.exerciseDao.insertAllExercises(
                     *exerciseResponse.results!!.asDatabaseModel(
                         this@FitBuddyRepository
                     )
                 )
+                if (exerciseResponse.next != null) {
+                    refreshExercises(offset = offset + limit, limit = limit)
+                }
                 Timber.i("Saved exercises to db")
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
@@ -117,6 +174,20 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 Timber.i("${exerciseResponse.results!!.size} equipments fetched")
                 database.exerciseDao.insertAllEquipments(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved equipment to db")
+            } catch (t: Throwable) {
+                Timber.e(t.message.toString())
+            }
+        }
+    }
+
+    suspend fun refreshMuscles() {
+        withContext(Dispatchers.IO) {
+            try {
+                Timber.i("Started to look for muscles")
+                val exerciseResponse = WgerApi.retrofitService.getMuscles().await()
+                Timber.i("${exerciseResponse.results!!.size} muscles fetched")
+                database.exerciseDao.insertAllMuscles(*exerciseResponse.results!!.asDatabaseModel())
+                Timber.i("Saved muscles to db")
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }

@@ -3,6 +3,7 @@ package com.hardiksachan.fitbuddy.network
 import com.hardiksachan.fitbuddy.database.DatabaseEquipment
 import com.hardiksachan.fitbuddy.database.DatabaseExercise
 import com.hardiksachan.fitbuddy.database.DatabaseExerciseCategory
+import com.hardiksachan.fitbuddy.database.DatabaseMuscle
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import com.squareup.moshi.Json
 
@@ -81,10 +82,25 @@ data class NetworkEquipment(
     var name: String? = null
 )
 
+data class NetworkMuscle(
+    @Json(name = "id")
+    var id: Int? = null,
+
+    @Json(name = "name")
+    var name: String? = null,
+
+    @Json(name = "is_front")
+    var isFront: Boolean? = null
+)
+
 suspend fun List<NetworkExercise>.asDatabaseModel(repository: FitBuddyRepository): Array<DatabaseExercise> {
     return map {
-        repository.deleteAllEquipmentsOfExercise(it.id ?: throw Exception("Exercise must have Id"),)
+        repository.deleteAllEquipmentsOfExercise(it.id ?: throw Exception("Exercise must have Id"))
         repository.saveExerciseEquipment(it.equipment, it.id)
+
+        repository.deleteAllMusclesOfExercise(it.id ?: throw Exception("Exercise must have Id"))
+        repository.saveExerciseMuscle(it.muscles, it.id, false)
+        repository.saveExerciseMuscle(it.musclesSecondary, it.id, true)
 
         DatabaseExercise(
             id = it.id ?: throw Exception("Exercise must have Id"),
@@ -93,9 +109,7 @@ suspend fun List<NetworkExercise>.asDatabaseModel(repository: FitBuddyRepository
             description = it.description ?: "",
             name = it.name ?: "",
             category = it.category ?: -1,
-            language = it.language ?: -1,
-            muscles = it.muscles?.toMutableList() ?: arrayListOf(),
-            muscles_secondary = it.musclesSecondary?.toMutableList() ?: arrayListOf(),
+            language = it.language ?: -1
         )
 
     }.toTypedArray()
@@ -110,10 +124,21 @@ fun List<NetworkExerciseCategory>.asDatabaseModel(): Array<DatabaseExerciseCateg
     }.toTypedArray()
 }
 
+@JvmName("asDatabaseModelNetworkEquipment")
 fun List<NetworkEquipment>.asDatabaseModel(): Array<DatabaseEquipment> {
     return map {
         DatabaseEquipment(
             id = it.id ?: throw Exception("Equipment must have Id"),
+            name = it.name ?: "",
+        )
+    }.toTypedArray()
+}
+
+@JvmName("asDatabaseModelNetworkMuscle")
+fun List<NetworkMuscle>.asDatabaseModel(): Array<DatabaseMuscle> {
+    return map {
+        DatabaseMuscle(
+            id = it.id ?: throw Exception("Muscle must have Id"),
             name = it.name ?: "",
         )
     }.toTypedArray()

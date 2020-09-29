@@ -7,5 +7,7 @@
     <string name="equipment_format">Equipments: %s</string>
     <string name="equipment_not_found">No Equipments</string>
     <string name="equipment_header">Equipment</string>
-    <string name="num_active_filters">%d Active Filters</string>
+    <string name="num_active_filters">%d Active</string>
+    <string name="clear_all">Clear all</string>
+    <string name="num_active_filter_long">%d Active Filters</string>
 </resources>
