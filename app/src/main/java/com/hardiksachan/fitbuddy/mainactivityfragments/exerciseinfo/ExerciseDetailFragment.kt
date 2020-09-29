@@ -1,60 +1,56 @@
 package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseinfo
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hardiksachan.fitbuddy.R
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import com.hardiksachan.fitbuddy.databinding.FragmentExerciseDetailBinding
+import com.hardiksachan.fitbuddy.mainactivityfragments.MainActivitySharedViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ExerciseDetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ExerciseDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+    val sharedViewModel: MainActivitySharedViewModel by activityViewModels<MainActivitySharedViewModel> {
+        val activity = requireNotNull(this.activity)
+        MainActivitySharedViewModel.Factory(activity.application)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exercise_detail, container, false)
-    }
+        val binding = FragmentExerciseDetailBinding.inflate(inflater)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ExerciseDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ExerciseDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+
+        val adapter = ExerciseDetailViewPagerAdapter(viewLifecycleOwner)
+        binding.viewPagerExerciseDetail.adapter = adapter
+
+        val exerciseList = sharedViewModel.exercises?.value
+
+        adapter.submitList(exerciseList)
+
+        val selectedExercise = sharedViewModel.getExerciseToDisplayOnDetail()
+        val selectedExerciseIndex = exerciseList?.indexOf(selectedExercise)
+
+        binding.viewPagerExerciseDetail.setCurrentItem(selectedExerciseIndex ?: 0, false)
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                binding.root.findNavController()
+                    .navigate(
+                        ExerciseDetailFragmentDirections
+                            .actionExerciseDetailFragmentToExerciseSelectorFragment()
+                    )
             }
+        })
+
+
+        return binding.root
     }
 }

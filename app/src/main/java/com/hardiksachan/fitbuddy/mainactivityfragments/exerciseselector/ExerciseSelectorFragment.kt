@@ -29,6 +29,8 @@ class ExerciseSelectorFragment : Fragment() {
         MainActivitySharedViewModel.Factory(activity.application)
     }
 
+    lateinit var binding: FragmentExerciseSelectorBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -38,9 +40,12 @@ class ExerciseSelectorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = FragmentExerciseSelectorBinding.inflate(inflater, container, false)
+        binding = FragmentExerciseSelectorBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        val adapter = ExerciseListAdapter(viewLifecycleOwner)
+        val adapter = ExerciseListAdapter(viewLifecycleOwner, ExerciseListAdapter.OnClickListener {
+            viewModel.navigateToDetail(it)
+            sharedViewModel.setExerciseToDisplayOnDetail(it)
+        })
         binding.rvExerciseList.adapter = adapter
 
 
@@ -73,6 +78,16 @@ class ExerciseSelectorFragment : Fragment() {
             }
         })
 
+        viewModel.navigateToDetail.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.root.findNavController()
+                    .navigate(
+                        ExerciseSelectorFragmentDirections
+                            .actionExerciseSelectorFragmentToExerciseDetailFragment()
+                    )
+            }
+        })
+
         binding.exerciseSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -95,6 +110,11 @@ class ExerciseSelectorFragment : Fragment() {
     private fun updateExerciseLiveDataBinding(adapter: ExerciseListAdapter) {
         sharedViewModel.exercises?.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+            binding.noResultsFoundLayout.visibility = if (it.isEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         })
     }
 }

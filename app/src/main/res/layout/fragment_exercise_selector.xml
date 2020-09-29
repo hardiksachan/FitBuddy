@@ -74,11 +74,36 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_exercise_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="6"
                 tools:listitem="@layout/recyclerview_item_exercise" />
 
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/no_results_found_layout"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".7"
+                    android:src="@drawable/ic_error_white_18dp"
+                    app:tint="?attr/colorControlHighlight"
+                    android:scaleType="fitCenter"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".3"
+                    android:gravity="center"
+                    android:textAppearance="?attr/textAppearanceSearchResultTitle"
+                    android:text="@string/no_results_found"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

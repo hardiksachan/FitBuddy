@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">FitBuddy</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="categoryHeader">Category</string>
     <string name="category_format">Category: %s</string>
@@ -10,4 +9,6 @@
     <string name="num_active_filters">%d Active</string>
     <string name="clear_all">Clear all</string>
     <string name="num_active_filter_long">%d Active Filters</string>
+    <string name="none_item">None</string>
+    <string name="no_results_found">No Results Found</string>
 </resources>

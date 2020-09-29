@@ -17,7 +17,7 @@ enum class FilterByWhat(val type: String) {
     Equipment("Equipment")
 }
 
-class ExerciseFilterFragment : Fragment() {
+class ExerciseFilterByWhatFragment : Fragment() {
 
     val viewModel: ExerciseFilterByWhatViewModel by lazy {
         val activity = requireNotNull(this.activity)
@@ -39,14 +39,6 @@ class ExerciseFilterFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-//        binding.cardCategory.setOnClickListener {
-//            viewModel.onFilterSpecificTitleClicked(FilterByWhat.Category)
-//        }
-//
-//        binding.cardEquipment.setOnClickListener {
-//            viewModel.onFilterSpecificTitleClicked(FilterByWhat.Equipment)
-//        }
-
         val adapter = ExerciseFilterByWhatListAdapter(
             viewLifecycleOwner,
             sharedViewModel,
@@ -60,7 +52,7 @@ class ExerciseFilterFragment : Fragment() {
                 if (it != null) {
                     binding.root.findNavController()
                         .navigate(
-                            ExerciseFilterFragmentDirections
+                            ExerciseFilterByWhatFragmentDirections
                                 .actionExerciseFilterFragmentToExerciseFilterSpecificFragment(it)
                         )
                     viewModel.navigatedToSpecificFilter()

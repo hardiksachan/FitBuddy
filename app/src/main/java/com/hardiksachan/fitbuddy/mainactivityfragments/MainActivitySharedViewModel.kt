@@ -2,10 +2,12 @@ package com.hardiksachan.fitbuddy.mainactivityfragments
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.FilterByWhat
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
 class MainActivitySharedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -14,6 +16,8 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
         get() = _eventUpdateExerciseLiveDataObserver
 
     private val fitBuddyRepository = FitBuddyRepository(application)
+
+    private var exerciseToDisplayOnDetail : Exercise? = null
 
     var categoryFilterList: MutableList<Int> = mutableListOf()
     var equipmentFilterList: MutableList<Int> = mutableListOf()
@@ -49,9 +53,15 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
         exercises = if (categoryFilterList.size == 0 && equipmentFilterList.size == 0) {
             fitBuddyRepository.getExercises(searchQuery = searchQuery)
         } else if (categoryFilterList.size != 0 && equipmentFilterList.size == 0) {
-            fitBuddyRepository.getExercises(categories = categoryFilterList as List<Int>, searchQuery = searchQuery)
+            fitBuddyRepository.getExercises(
+                categories = categoryFilterList as List<Int>,
+                searchQuery = searchQuery
+            )
         } else if (categoryFilterList.size == 0 && equipmentFilterList.size != 0) {
-            fitBuddyRepository.getExercises(equipments = equipmentFilterList as List<Int>, searchQuery = searchQuery)
+            fitBuddyRepository.getExercises(
+                equipments = equipmentFilterList as List<Int>,
+                searchQuery = searchQuery
+            )
         } else {
             fitBuddyRepository.getExercises(
                 categories = categoryFilterList,
@@ -111,6 +121,16 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
         else searchQuery = "%$newSearchQuery%"
         updateExercises()
     }
+
+    fun getExerciseToDisplayOnDetail(): Exercise {
+        return exerciseToDisplayOnDetail ?: throw Exception("exercise Must Be selected")
+    }
+
+    fun setExerciseToDisplayOnDetail(e: Exercise) {
+        exerciseToDisplayOnDetail = e
+    }
+
+
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

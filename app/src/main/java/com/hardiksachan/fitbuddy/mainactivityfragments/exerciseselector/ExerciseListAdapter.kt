@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
+class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner, val onClickListener: OnClickListener) :
     ListAdapter<Exercise, ExerciseListAdapter.ViewHolder>(ExerciseDiffCallback()) {
     class ViewHolder private constructor(val binding: RecyclerviewItemExerciseBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -64,6 +64,13 @@ class ExerciseListAdapter(val parentLifecycleOwner: LifecycleOwner) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener{
+            onClickListener.onClick(getItem(position))
+        }
+    }
+
+    class OnClickListener(val clickListener : (exercise: Exercise) -> Unit) {
+        fun onClick(exercise: Exercise) = clickListener(exercise)
     }
 }
 

@@ -2,12 +2,17 @@ package com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.hardiksachan.fitbuddy.domain.Exercise
 
 class ExerciseSelectorViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _navigateToFilter = MutableLiveData<Boolean>()
     val navigateToFilter: LiveData<Boolean>
         get() = _navigateToFilter
+
+    private val _navigateToDetail = MutableLiveData<Boolean>()
+    val navigateToDetail: LiveData<Boolean>
+        get() = _navigateToDetail
 
 
     fun onFilterFabClicked() {
@@ -16,6 +21,14 @@ class ExerciseSelectorViewModel(application: Application) : AndroidViewModel(app
 
     fun onNavigateToFilterDone() {
         _navigateToFilter.value = false
+    }
+
+    fun navigateToDetail(exercise: Exercise) {
+        _navigateToDetail.value = true
+    }
+
+    fun onNavigateToDetailDone() {
+        _navigateToDetail.value = false
     }
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {

@@ -11,10 +11,13 @@
         <action
             android:id="@+id/action_exerciseSelectorFragment_to_exerciseFilterFragment"
             app:destination="@id/exerciseFilterFragment" />
+        <action
+            android:id="@+id/action_exerciseSelectorFragment_to_exerciseDetailFragment"
+            app:destination="@id/exerciseDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/exerciseFilterFragment"
-        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterFragment"
+        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseselector.exercisefilter.ExerciseFilterByWhatFragment"
         android:label="ExerciseFilterFragment">
         <action
             android:id="@+id/action_exerciseFilterFragment_to_exerciseSelectorFragment"
@@ -35,5 +38,13 @@
         <action
             android:id="@+id/action_exerciseFilterSpecificFragment_to_exerciseFilterFragment"
             app:destination="@id/exerciseFilterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseDetailFragment"
+        android:name="com.hardiksachan.fitbuddy.mainactivityfragments.exerciseinfo.ExerciseDetailFragment"
+        android:label="ExerciseDetailFragment" >
+        <action
+            android:id="@+id/action_exerciseDetailFragment_to_exerciseSelectorFragment"
+            app:destination="@id/exerciseSelectorFragment" />
     </fragment>
 </navigation>
