@@ -22,6 +22,13 @@ class ExerciseFilterByWhatListAdapter(
                 R.string.num_active_filters,
                 sharedViewModel.getActiveFilters(item)
             )
+            binding.btnClearFilters.setOnClickListener {
+                sharedViewModel.clearFilters(item)
+                binding.chipActiveFilters.text = binding.chipActiveFilters.context.getString(
+                    R.string.num_active_filters,
+                    sharedViewModel.getActiveFilters(item)
+                )
+            }
         }
 
         companion object {

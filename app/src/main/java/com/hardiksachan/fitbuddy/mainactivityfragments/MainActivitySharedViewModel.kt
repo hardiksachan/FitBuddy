@@ -88,6 +88,19 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
+    fun clearFilters(filterByWhat: FilterByWhat?){
+        if (filterByWhat == null){
+            equipmentFilterList.clear()
+            categoryFilterList.clear()
+        } else {
+            when (filterByWhat) {
+                FilterByWhat.Equipment -> equipmentFilterList.clear()
+                FilterByWhat.Category -> categoryFilterList.clear()
+            }
+        }
+        updateExercises()
+    }
+
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainActivitySharedViewModel::class.java)) {
