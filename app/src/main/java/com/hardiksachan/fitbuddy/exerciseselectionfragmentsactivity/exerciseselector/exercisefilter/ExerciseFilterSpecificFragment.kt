@@ -42,6 +42,11 @@ class ExerciseFilterSpecificFragment : Fragment() {
         val equipmentFilterListAdapter =
             ExerciseEquipmentFilterListAdapter(viewLifecycleOwner, sharedViewModel)
 
+        val primaryMuscleFilterListAdapter =
+            ExerciseMuscleFilterListAdapter(viewLifecycleOwner, sharedViewModel, false)
+        val secondaryMuscleFilterListAdapter =
+            ExerciseMuscleFilterListAdapter(viewLifecycleOwner, sharedViewModel, true)
+
         sharedViewModel.exerciseCategories.observe(
             viewLifecycleOwner, Observer<List<ExerciseCategory>> {
                 categoryFilterListAdapter.submitList(it)
@@ -53,11 +58,20 @@ class ExerciseFilterSpecificFragment : Fragment() {
             }
         )
 
+        sharedViewModel.muscles.observe(
+            viewLifecycleOwner, Observer {
+                primaryMuscleFilterListAdapter.submitList(it)
+                secondaryMuscleFilterListAdapter.submitList(it)
+            }
+        )
+
         binding.tvSpecificFilterName.text = arguments.filterBy.type
 
         binding.rvSpecificFilter.adapter = when (arguments.filterBy) {
             FilterByWhat.Category -> categoryFilterListAdapter
             FilterByWhat.Equipment -> equipmentFilterListAdapter
+            FilterByWhat.PrimaryMuscle -> primaryMuscleFilterListAdapter
+            FilterByWhat.SecondaryMuscle -> secondaryMuscleFilterListAdapter
         }
 
         return binding.root

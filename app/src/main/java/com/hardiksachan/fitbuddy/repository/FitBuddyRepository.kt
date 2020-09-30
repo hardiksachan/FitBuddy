@@ -3,14 +3,11 @@ package com.hardiksachan.fitbuddy.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.Transformations.map
-import com.hardiksachan.fitbuddy.database.DatabaseExerciseEquipment
-import com.hardiksachan.fitbuddy.database.DatabaseExerciseMuscle
-import com.hardiksachan.fitbuddy.database.asDomainModel
-import com.hardiksachan.fitbuddy.database.getDatabase
+import com.hardiksachan.fitbuddy.database.*
 import com.hardiksachan.fitbuddy.domain.Equipment
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.domain.ExerciseCategory
+import com.hardiksachan.fitbuddy.domain.Muscle
 import com.hardiksachan.fitbuddy.network.WgerApi
 import com.hardiksachan.fitbuddy.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
@@ -21,45 +18,58 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     private val database = getDatabase(applicationContext)
 
+    private var masterExerciseCategories: MutableList<Int> = mutableListOf()
+    private var masterExerciseEquipments: MutableList<Int> = mutableListOf()
+    private var masterExerciseMuscles: MutableList<Int> = mutableListOf()
+
     fun getExercises(
         searchQuery: String? = "%",
         categories: List<Int>? = null,
-        equipments: List<Int>? = null
+        equipments: List<Int>? = null,
+        primaryMuscles: List<Int>? = null,
+        secondaryMuscles: List<Int>? = null
     ): LiveData<List<Exercise>>? {
+
         val searchQuery = searchQuery ?: "%"
-        return if (categories == null && equipments == null) {
-            Transformations.map(database.exerciseDao.getExercises(searchQuery)) {
-                it.asDomainModel(this)
-            }
-        } else if (categories != null && equipments == null) {
-            Transformations.map(
-                database.exerciseDao.getExercises(
-                    categories = categories,
-                    searchText = searchQuery
-                )
-            ) {
-                it.asDomainModel(this)
-            }
-        } else if (categories == null && equipments != null) {
-            Transformations.map(
-                database.exerciseDao.getExercisesUsingEquipment(
-                    equipments = equipments,
-                    searchText = searchQuery
-                )
-            ) {
-                it.asDomainModel(this)
-            }
+        val categories: List<Int> = if (categories == null || categories.isEmpty()) {
+            masterExerciseCategories
         } else {
-            Transformations.map(
-                database.exerciseDao.getExercises(
-                    categories = categories!!,
-                    equipments = equipments!!,
-                    searchText = searchQuery
-                )
-            ) {
-                it.asDomainModel(this)
-            }
+            categories
         }
+        val equipments: List<Int> = if (equipments == null || equipments.isEmpty()) {
+            masterExerciseEquipments
+        } else {
+            equipments
+        }
+        val primaryMuscles: List<Int> =
+            if (primaryMuscles == null || primaryMuscles.isEmpty()) {
+                masterExerciseMuscles
+            } else {
+                primaryMuscles
+            }
+        val secondaryMuscles: List<Int> =
+            if (secondaryMuscles == null || secondaryMuscles.isEmpty()) {
+                masterExerciseMuscles
+            } else {
+                secondaryMuscles
+            }
+        Timber.d("Categories: $categories")
+        Timber.d("Equipments: $equipments")
+        Timber.d("Primary Muscles: $primaryMuscles")
+        Timber.d("Secondary Muscles: $secondaryMuscles")
+        return Transformations.map(
+            database.exerciseDao.getExercises(
+                categories = categories,
+                equipments = equipments,
+                primaryMuscles = primaryMuscles,
+                secondaryMuscles = secondaryMuscles,
+                searchText = searchQuery
+            )
+        ) {
+            it.asDomainModel(this)
+
+        }
+
     }
 
     val exerciseCategories: LiveData<List<ExerciseCategory>> =
@@ -69,6 +79,11 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     val equipments: LiveData<List<Equipment>> =
         Transformations.map(database.exerciseDao.getEquipments()) {
+            it.asDomainModel()
+        }
+
+    val muscles: LiveData<List<Muscle>> =
+        Transformations.map(database.exerciseDao.getMuscles()) {
             it.asDomainModel()
         }
 
@@ -92,7 +107,11 @@ class FitBuddyRepository(private val applicationContext: Context) {
         database.exerciseDao.clearMusclesForExercise(exerciseId)
 
     suspend fun saveExerciseEquipment(equipment: List<Int>?, id: Int?) {
-        equipment ?: return
+        val equipment = if (equipment == null || equipment.isEmpty()) {
+            listOf<Int>(-1)
+        } else {
+            equipment
+        }
         id ?: return
 
         equipment.map {
@@ -109,7 +128,12 @@ class FitBuddyRepository(private val applicationContext: Context) {
     }
 
     suspend fun saveExerciseMuscle(muscle: List<Int>?, id: Int?, isSecondary: Boolean) {
-        muscle ?: return
+        val muscle = if (muscle == null || muscle.isEmpty()) {
+            Timber.e("Saving 1 Exercise With No Muscle")
+            listOf<Int>(-1)
+        } else {
+            muscle
+        }
         id ?: return
 
         muscle.map {
@@ -147,16 +171,26 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 }
                 Timber.i("Saved exercises to db")
 
+                masterExerciseCategories =
+                    database.exerciseDao.getExerciseCategoriesIds() as MutableList<Int>
+
                 Timber.i("Saving Equipments and muscles to db")
                 exerciseResponse.results!!.forEach {
                     val repository = this@FitBuddyRepository
-                    repository.deleteAllEquipmentsOfExercise(it.id ?: throw Exception("Exercise must have Id"))
+                    repository.deleteAllEquipmentsOfExercise(
+                        it.id ?: throw Exception("Exercise must have Id")
+                    )
                     repository.saveExerciseEquipment(it.equipment, it.id)
 
-                    repository.deleteAllMusclesOfExercise(it.id ?: throw Exception("Exercise must have Id"))
+                    repository.deleteAllMusclesOfExercise(
+                        it.id ?: throw Exception("Exercise must have Id")
+                    )
                     repository.saveExerciseMuscle(it.muscles, it.id, false)
                     repository.saveExerciseMuscle(it.musclesSecondary, it.id, true)
                 }
+                masterExerciseEquipments =
+                    database.exerciseDao.getEquipmentIds() as MutableList<Int>
+                masterExerciseMuscles = database.exerciseDao.getMuscleIds() as MutableList<Int>
                 Timber.i("Saved Equipments and muscles to db")
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
@@ -173,6 +207,12 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 Timber.i("${exerciseResponse.results!!.size} exercise categories fetched")
                 database.exerciseDao.insertAllExerciseCategories(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved exercise categories to db")
+                database.exerciseDao.insertAllExerciseCategories(
+                    DatabaseExerciseCategory(
+                        id = -1,
+                        name = "None"
+                    )
+                )
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }
@@ -187,6 +227,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 Timber.i("${exerciseResponse.results!!.size} equipments fetched")
                 database.exerciseDao.insertAllEquipments(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved equipment to db")
+                database.exerciseDao.insertAllEquipments(DatabaseEquipment(id = -1, name = "None"))
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }
@@ -201,6 +242,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 Timber.i("${exerciseResponse.results!!.size} muscles fetched")
                 database.exerciseDao.insertAllMuscles(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved muscles to db")
+                database.exerciseDao.insertAllMuscles(DatabaseMuscle(id = -1, name = "None"))
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }

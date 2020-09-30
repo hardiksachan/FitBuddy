@@ -7,7 +7,6 @@ import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exercisesele
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
 
 class MainActivitySharedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -17,15 +16,18 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 
     private val fitBuddyRepository = FitBuddyRepository(application)
 
-    private var exerciseToDisplayOnDetail : Exercise? = null
+    private var exerciseToDisplayOnDetail: Exercise? = null
 
     var categoryFilterList: MutableList<Int> = mutableListOf()
     var equipmentFilterList: MutableList<Int> = mutableListOf()
+    var primaryMuscleFilterList: MutableList<Int> = mutableListOf()
+    var secondaryMuscleFilterList: MutableList<Int> = mutableListOf()
     var searchQuery: String? = "%"
 
     var exercises = fitBuddyRepository.getExercises()
     val exerciseCategories = fitBuddyRepository.exerciseCategories
     val equipments = fitBuddyRepository.equipments
+    val muscles = fitBuddyRepository.muscles
 
     init {
         viewModelScope.launch {
@@ -48,27 +50,38 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 
     }
 
+    fun onprimaryMuscleFilterChanged(muscleId: Int, checked: Boolean) {
+        if (checked) {
+            primaryMuscleFilterList.add(muscleId)
+        } else {
+            primaryMuscleFilterList.remove(muscleId)
+        }
+
+        updateExercises()
+
+    }
+
+    fun onSecndaryMuscleFilterChanged(muscleId: Int, checked: Boolean) {
+        if (checked) {
+            secondaryMuscleFilterList.add(muscleId)
+        } else {
+            secondaryMuscleFilterList.remove(muscleId)
+        }
+
+        updateExercises()
+
+    }
+
     private fun updateExercises() {
 
-        exercises = if (categoryFilterList.size == 0 && equipmentFilterList.size == 0) {
-            fitBuddyRepository.getExercises(searchQuery = searchQuery)
-        } else if (categoryFilterList.size != 0 && equipmentFilterList.size == 0) {
-            fitBuddyRepository.getExercises(
-                categories = categoryFilterList as List<Int>,
-                searchQuery = searchQuery
-            )
-        } else if (categoryFilterList.size == 0 && equipmentFilterList.size != 0) {
-            fitBuddyRepository.getExercises(
-                equipments = equipmentFilterList as List<Int>,
-                searchQuery = searchQuery
-            )
-        } else {
-            fitBuddyRepository.getExercises(
-                categories = categoryFilterList,
-                equipments = equipmentFilterList as List<Int>,
-                searchQuery = searchQuery
-            )
-        }
+        exercises = fitBuddyRepository.getExercises(
+            categories = categoryFilterList as List<Int>,
+            equipments = equipmentFilterList as List<Int>,
+            primaryMuscles = primaryMuscleFilterList as List<Int>,
+            secondaryMuscles = secondaryMuscleFilterList as List<Int>,
+            searchQuery = searchQuery
+        )
+
         _eventUpdateExerciseLiveDataObserver.value = true
 
     }
@@ -94,11 +107,13 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     fun getActiveFilters(filterByWhat: FilterByWhat?): Int {
         return if (filterByWhat == null) {
             (equipmentFilterList.size +
-                    categoryFilterList.size)
+                    categoryFilterList.size + primaryMuscleFilterList.size + secondaryMuscleFilterList.size)
         } else {
             when (filterByWhat) {
                 FilterByWhat.Equipment -> equipmentFilterList.size
                 FilterByWhat.Category -> categoryFilterList.size
+                FilterByWhat.PrimaryMuscle -> primaryMuscleFilterList.size
+                FilterByWhat.SecondaryMuscle -> secondaryMuscleFilterList.size
             }
         }
     }
@@ -107,10 +122,14 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
         if (filterByWhat == null) {
             equipmentFilterList.clear()
             categoryFilterList.clear()
+            primaryMuscleFilterList.clear()
+            secondaryMuscleFilterList.clear()
         } else {
             when (filterByWhat) {
                 FilterByWhat.Equipment -> equipmentFilterList.clear()
                 FilterByWhat.Category -> categoryFilterList.clear()
+                FilterByWhat.PrimaryMuscle -> primaryMuscleFilterList.clear()
+                FilterByWhat.SecondaryMuscle -> secondaryMuscleFilterList.clear()
             }
         }
         updateExercises()
@@ -129,7 +148,6 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     fun setExerciseToDisplayOnDetail(e: Exercise) {
         exerciseToDisplayOnDetail = e
     }
-
 
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {

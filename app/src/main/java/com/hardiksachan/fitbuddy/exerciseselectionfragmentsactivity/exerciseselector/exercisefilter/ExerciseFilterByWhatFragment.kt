@@ -14,7 +14,9 @@ import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivity
 
 enum class FilterByWhat(val type: String) {
     Category("Category"),
-    Equipment("Equipment")
+    Equipment("Equipment"),
+    PrimaryMuscle("Primary Muscle"),
+    SecondaryMuscle("Secondary Muscle"),
 }
 
 class ExerciseFilterByWhatFragment : Fragment() {

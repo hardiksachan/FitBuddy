@@ -12,23 +12,34 @@ private const val SEARCH_QUERY =
 @Dao
 interface ExerciseDao {
 
-    @Query("SELECT * from database_exercise WHERE $SEARCH_QUERY")
-    fun getExercises(searchText: String): LiveData<List<DatabaseExercise>>
+//    @Query("SELECT * from database_exercise WHERE $SEARCH_QUERY")
+//    fun getExercises(searchText: String): LiveData<List<DatabaseExercise>>
+//
+//    @Query("SELECT * from database_exercise WHERE category IN (:categories) AND $SEARCH_QUERY")
+//    fun getExercises(categories: List<Int>, searchText: String): LiveData<List<DatabaseExercise>>
+//
+//
+//    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author,ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND $SEARCH_QUERY")
+//    fun getExercisesUsingEquipment(
+//        equipments: List<Int>,
+//        searchText: String
+//    ): LiveData<List<DatabaseExercise>>
 
-    @Query("SELECT * from database_exercise WHERE category IN (:categories) AND $SEARCH_QUERY")
-    fun getExercises(categories: List<Int>, searchText: String): LiveData<List<DatabaseExercise>>
-
-
-    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author,ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND $SEARCH_QUERY")
-    fun getExercisesUsingEquipment(
-        equipments: List<Int>,
-        searchText: String
-    ): LiveData<List<DatabaseExercise>>
-
-    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author,  ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND ex.category IN (:categories) AND $SEARCH_QUERY")
+    @Query(
+        """SELECT *
+        from database_exercise as ex
+        WHERE 
+        EXISTS (SELECT eq.equipmentId FROM database_exercise_equipment as eq WHERE eq.equipmentId IN (:equipments) AND eq.exerciseId = ex.id)
+        AND ex.category IN (:categories) 
+        AND EXISTS (SELECT mu.muscleId FROM database_exercise_muscle as mu WHERE mu.muscleId IN (:primaryMuscles) AND mu.exerciseId = ex.id AND mu.isSecondary = 0)
+        AND EXISTS (SELECT mu.muscleId FROM database_exercise_muscle as mu WHERE mu.muscleId IN (:secondaryMuscles) AND mu.exerciseId = ex.id AND mu.isSecondary = 1)
+        AND $SEARCH_QUERY"""
+    )
     fun getExercises(
         equipments: List<Int>,
         categories: List<Int>,
+        primaryMuscles: List<Int>,
+        secondaryMuscles: List<Int>,
         searchText: String
     ): LiveData<List<DatabaseExercise>>
 
@@ -39,6 +50,9 @@ interface ExerciseDao {
     @Query("SELECT * from database_exercise_category")
     fun getExerciseCategories(): LiveData<List<DatabaseExerciseCategory>>
 
+    @Query("SELECT id FROM database_exercise_category")
+    fun getExerciseCategoriesIds(): List<Int>
+
     @Query("SELECT name from database_exercise_category WHERE id = :id")
     fun getExerciseCategoryNameFromId(id: Int): LiveData<String>
 
@@ -47,6 +61,9 @@ interface ExerciseDao {
 
     @Query("SELECT * from database_equipment")
     fun getEquipments(): LiveData<List<DatabaseEquipment>>
+
+    @Query("SELECT id FROM database_equipment")
+    fun getEquipmentIds(): List<Int>
 
     @Query("SELECT name from database_equipment WHERE id = :id")
     fun getEquipmentNameFromId(id: Int): LiveData<String>
@@ -65,6 +82,9 @@ interface ExerciseDao {
 
     @Query("SELECT * from database_muscle")
     fun getMuscles(): LiveData<List<DatabaseMuscle>>
+
+    @Query("SELECT id FROM database_muscle")
+    fun getMuscleIds(): List<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllMuscles(vararg muscle: DatabaseMuscle)
