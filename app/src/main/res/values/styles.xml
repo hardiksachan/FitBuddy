@@ -7,6 +7,13 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="fontFamily">@font/roboto_light</item>
+
+    </style>
+
+    <style name="TextAppearance.MyApp.CustomHeadline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/denk_one</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
     </style>
 
 </resources>

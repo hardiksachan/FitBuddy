@@ -29,6 +29,10 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     val equipments = fitBuddyRepository.equipments
     val muscles = fitBuddyRepository.muscles
 
+//    val repositoryUpdated = fitBuddyRepository.repositoryUpdated
+//
+//    fun repositoryUpdateHandled() = fitBuddyRepository.onRepositoryUpdatedHandled()
+
     init {
         viewModelScope.launch {
             fitBuddyRepository.refreshMuscles()
@@ -72,7 +76,7 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 
     }
 
-    private fun updateExercises() {
+    fun updateExercises() {
 
         exercises = fitBuddyRepository.getExercises(
             categories = categoryFilterList as List<Int>,

@@ -12,8 +12,8 @@ import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 
 @Entity(tableName = "database_exercise")
 data class DatabaseExercise constructor(
-    @PrimaryKey
-    var id: Int,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     val license_author: String,
     val status: String,
     val description: String,

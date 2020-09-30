@@ -93,9 +93,8 @@ data class NetworkMuscle(
     var isFront: Boolean? = null
 )
 
-suspend fun List<NetworkExercise>.asDatabaseModel(repository: FitBuddyRepository): Array<DatabaseExercise> {
+fun List<NetworkExercise>.asDatabaseModel(repository: FitBuddyRepository): Array<DatabaseExercise> {
     return map {
-
         DatabaseExercise(
             id = it.id ?: throw Exception("Exercise must have Id"),
             license_author = it.licenseAuthor ?: "",

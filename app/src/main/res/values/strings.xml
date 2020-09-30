@@ -12,4 +12,5 @@
     <string name="none_item">None</string>
     <string name="no_results_found">No Results Found</string>
     <string name="num_results_found">%d Results</string>
+    <string name="watch_tutorial">Watch Tutorial</string>
 </resources>

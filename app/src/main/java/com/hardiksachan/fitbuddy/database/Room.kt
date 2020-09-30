@@ -29,10 +29,10 @@ interface ExerciseDao {
         """SELECT *
         from database_exercise as ex
         WHERE 
-        EXISTS (SELECT eq.equipmentId FROM database_exercise_equipment as eq WHERE eq.equipmentId IN (:equipments) AND eq.exerciseId = ex.id)
-        AND ex.category IN (:categories) 
-        AND EXISTS (SELECT mu.muscleId FROM database_exercise_muscle as mu WHERE mu.muscleId IN (:primaryMuscles) AND mu.exerciseId = ex.id AND mu.isSecondary = 0)
-        AND EXISTS (SELECT mu.muscleId FROM database_exercise_muscle as mu WHERE mu.muscleId IN (:secondaryMuscles) AND mu.exerciseId = ex.id AND mu.isSecondary = 1)
+        EXISTS (SELECT eq.equipmentId FROM database_exercise_equipment as eq WHERE (eq.equipmentId IN (:equipments) OR -255 in (:equipments)) AND eq.exerciseId = ex.id)
+        AND (ex.category IN (:categories) OR -255 in (:categories) )
+        AND EXISTS (SELECT mu.muscleId FROM database_exercise_muscle as mu WHERE (mu.muscleId IN (:primaryMuscles) OR -255 in (:primaryMuscles)) AND mu.exerciseId = ex.id AND mu.isSecondary = 0)
+        AND EXISTS (SELECT mu.muscleId FROM database_exercise_muscle as mu WHERE (mu.muscleId IN (:secondaryMuscles) OR -255 in (:primaryMuscles)) AND mu.exerciseId = ex.id AND mu.isSecondary = 1)
         AND $SEARCH_QUERY"""
     )
     fun getExercises(
@@ -124,7 +124,7 @@ fun getDatabase(context: Context): ExerciseDatabase {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 ExerciseDatabase::class.java,
-                "fit_buddy_db"
+                "fit_buddy_db.db"
             ).fallbackToDestructiveMigration()
                 .build()
         }

@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.hardiksachan.fitbuddy.database.*
-import com.hardiksachan.fitbuddy.domain.Equipment
-import com.hardiksachan.fitbuddy.domain.Exercise
-import com.hardiksachan.fitbuddy.domain.ExerciseCategory
-import com.hardiksachan.fitbuddy.domain.Muscle
+import com.hardiksachan.fitbuddy.domain.*
 import com.hardiksachan.fitbuddy.network.WgerApi
 import com.hardiksachan.fitbuddy.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +15,13 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     private val database = getDatabase(applicationContext)
 
-    private var masterExerciseCategories: MutableList<Int> = mutableListOf()
-    private var masterExerciseEquipments: MutableList<Int> = mutableListOf()
-    private var masterExerciseMuscles: MutableList<Int> = mutableListOf()
+//    private val _repositoryUpdated = MutableLiveData<Boolean>()
+//    val repositoryUpdated: LiveData<Boolean>
+//        get() = _repositoryUpdated
+
+//    fun onRepositoryUpdatedHandled(){
+//        _repositoryUpdated.value = false
+//    }
 
     fun getExercises(
         searchQuery: String? = "%",
@@ -32,24 +33,24 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
         val searchQuery = searchQuery ?: "%"
         val categories: List<Int> = if (categories == null || categories.isEmpty()) {
-            masterExerciseCategories
+            listOf(-255)
         } else {
             categories
         }
         val equipments: List<Int> = if (equipments == null || equipments.isEmpty()) {
-            masterExerciseEquipments
+            listOf(-255)
         } else {
             equipments
         }
         val primaryMuscles: List<Int> =
             if (primaryMuscles == null || primaryMuscles.isEmpty()) {
-                masterExerciseMuscles
+                listOf(-255)
             } else {
                 primaryMuscles
             }
         val secondaryMuscles: List<Int> =
             if (secondaryMuscles == null || secondaryMuscles.isEmpty()) {
-                masterExerciseMuscles
+                listOf(-255)
             } else {
                 secondaryMuscles
             }
@@ -171,8 +172,8 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 }
                 Timber.i("Saved exercises to db")
 
-                masterExerciseCategories =
-                    database.exerciseDao.getExerciseCategoriesIds() as MutableList<Int>
+//                masterExerciseCategories =
+//                    database.exerciseDao.getExerciseCategoriesIds() as MutableList<Int>
 
                 Timber.i("Saving Equipments and muscles to db")
                 exerciseResponse.results!!.forEach {
@@ -188,10 +189,11 @@ class FitBuddyRepository(private val applicationContext: Context) {
                     repository.saveExerciseMuscle(it.muscles, it.id, false)
                     repository.saveExerciseMuscle(it.musclesSecondary, it.id, true)
                 }
-                masterExerciseEquipments =
-                    database.exerciseDao.getEquipmentIds() as MutableList<Int>
-                masterExerciseMuscles = database.exerciseDao.getMuscleIds() as MutableList<Int>
+//                masterExerciseEquipments =
+//                    database.exerciseDao.getEquipmentIds() as MutableList<Int>
+//                masterExerciseMuscles = database.exerciseDao.getMuscleIds() as MutableList<Int>
                 Timber.i("Saved Equipments and muscles to db")
+//                _repositoryUpdated.postValue(true)
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }
@@ -213,6 +215,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
                         name = "None"
                     )
                 )
+//                _repositoryUpdated.postValue(true)
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }
@@ -228,6 +231,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 database.exerciseDao.insertAllEquipments(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved equipment to db")
                 database.exerciseDao.insertAllEquipments(DatabaseEquipment(id = -1, name = "None"))
+//                _repositoryUpdated.postValue(true)
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }
@@ -243,6 +247,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
                 database.exerciseDao.insertAllMuscles(*exerciseResponse.results!!.asDatabaseModel())
                 Timber.i("Saved muscles to db")
                 database.exerciseDao.insertAllMuscles(DatabaseMuscle(id = -1, name = "None"))
+//                _repositoryUpdated.postValue(true)
             } catch (t: Throwable) {
                 Timber.e(t.message.toString())
             }

@@ -1,5 +1,8 @@
 package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseinfo
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -113,7 +116,7 @@ class ExerciseDetailViewPagerAdapter(val parentLifecycleOwner: LifecycleOwner) :
                     val chipGroup = binding.chipGroupSecondaryMuscles
                     val inflator = LayoutInflater.from(chipGroup.context)
 
-                    if (data == null || data.isEmpty() ) {
+                    if (data == null || data.isEmpty()) {
                         chipGroup.removeAllViews()
                         val chip =
                             inflator.inflate(R.layout.simple_chip, chipGroup, false) as Chip
@@ -146,6 +149,20 @@ class ExerciseDetailViewPagerAdapter(val parentLifecycleOwner: LifecycleOwner) :
                     } else {
                         Html.fromHtml(item.description)
                     }
+            }
+
+            binding.btnWatchTutorial.setOnClickListener {
+                val nameURL = "how to perform ${item.name} exercise"
+                nameURL.replace("\\s".toRegex(), "+")
+                val webIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/results?search_query=$nameURL")
+                )
+                try {
+                    binding.root.context.startActivity(webIntent)
+                } catch (ex: ActivityNotFoundException) {
+                }
+
             }
         }
 

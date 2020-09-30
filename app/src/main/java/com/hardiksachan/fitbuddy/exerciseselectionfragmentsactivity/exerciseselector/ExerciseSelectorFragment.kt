@@ -15,7 +15,6 @@ import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseSelectorBinding
 import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 import timber.log.Timber
-import java.lang.Exception
 
 
 class ExerciseSelectorFragment : Fragment() {
@@ -49,10 +48,14 @@ class ExerciseSelectorFragment : Fragment() {
         })
         binding.rvExerciseList.adapter = adapter
 
-        try{
+        try {
             val layoutmanager = binding.rvExerciseList.layoutManager as LinearLayoutManager
             val selectedItem = sharedViewModel.getExerciseToDisplayOnDetail()
-            layoutmanager.scrollToPositionWithOffset(sharedViewModel.exercises?.value?.indexOf(selectedItem) ?: 0, 0)
+            layoutmanager.scrollToPositionWithOffset(
+                sharedViewModel.exercises?.value?.indexOf(
+                    selectedItem
+                ) ?: 0, 0
+            )
         } catch (e: Exception) {
             Timber.e(e.stackTraceToString())
         }
@@ -75,6 +78,12 @@ class ExerciseSelectorFragment : Fragment() {
             }
         })
 
+//        sharedViewModel.repositoryUpdated.observe(viewLifecycleOwner, Observer {
+//            if (it) {
+//                sharedViewModel.updateExercises()
+//                sharedViewModel.repositoryUpdateHandled()
+//            }
+//        })
 
         viewModel.navigateToFilter.observe(viewLifecycleOwner, {
             if (it) {
@@ -118,7 +127,8 @@ class ExerciseSelectorFragment : Fragment() {
     private fun updateExerciseLiveDataBinding(adapter: ExerciseListAdapter) {
         sharedViewModel.exercises?.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
-            binding.tvResultsFound.text = binding.root.context.getString(R.string.num_results_found, it.size)
+            binding.tvResultsFound.text =
+                binding.root.context.getString(R.string.num_results_found, it.size)
             binding.noResultsFoundLayout.visibility = if (it.isEmpty()) {
                 View.VISIBLE
             } else {

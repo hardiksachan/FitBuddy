@@ -1,17 +1,14 @@
 package com.hardiksachan.fitbuddy.domain
 
-import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import com.hardiksachan.fitbuddy.database.getDatabase
+import com.hardiksachan.fitbuddy.database.DatabaseExercise
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 
 
-data class Exercise constructor(
-    val id: Int,
+data class Exercise(
+    val id: Int = -1,
     val license_author: String,
-    val status: String,
+    val status: String = "3",
     val description: String,
     val name: String,
     val category: Int,
@@ -35,3 +32,16 @@ data class Muscle constructor(
     val id: Int,
     val name: String
 )
+
+fun List<Exercise>.asDomainModel(): List<DatabaseExercise> {
+    return map {
+        DatabaseExercise(
+            license_author = it.license_author,
+            status = it.status,
+            description = it.description,
+            name = it.name,
+            category = it.category,
+            language = it.language
+        )
+    }
+}
