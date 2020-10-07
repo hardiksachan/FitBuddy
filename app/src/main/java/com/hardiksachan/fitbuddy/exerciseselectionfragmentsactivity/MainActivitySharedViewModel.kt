@@ -1,6 +1,7 @@
 package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity
 
 import android.app.Application
+import android.content.Context.MODE_PRIVATE
 import androidx.lifecycle.*
 import com.hardiksachan.fitbuddy.domain.Exercise
 import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.FilterByWhat

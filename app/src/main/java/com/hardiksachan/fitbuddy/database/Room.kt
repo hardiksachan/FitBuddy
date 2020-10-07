@@ -4,26 +4,13 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-private const val DATABASE_VERSION = 12
+private const val DATABASE_VERSION = 15
 
 private const val SEARCH_QUERY =
     "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText)) ORDER BY name"
 
 @Dao
 interface ExerciseDao {
-
-//    @Query("SELECT * from database_exercise WHERE $SEARCH_QUERY")
-//    fun getExercises(searchText: String): LiveData<List<DatabaseExercise>>
-//
-//    @Query("SELECT * from database_exercise WHERE category IN (:categories) AND $SEARCH_QUERY")
-//    fun getExercises(categories: List<Int>, searchText: String): LiveData<List<DatabaseExercise>>
-//
-//
-//    @Query("SELECT ex.id, ex.name, ex.category, ex.description, ex.language, ex.license_author,ex.status from database_exercise as ex JOIN database_exercise_equipment as eq WHERE ex.id = eq.exerciseId AND eq.equipmentId IN (:equipments) AND $SEARCH_QUERY")
-//    fun getExercisesUsingEquipment(
-//        equipments: List<Int>,
-//        searchText: String
-//    ): LiveData<List<DatabaseExercise>>
 
     @Query(
         """SELECT *
@@ -97,6 +84,27 @@ interface ExerciseDao {
 
     @Query("DELETE FROM database_exercise_muscle WHERE exerciseId = :exerciseId")
     fun clearMusclesForExercise(exerciseId: Int)
+
+    @Query("SELECT * from database_user ORDER BY id DESC LIMIT 1")
+    fun getUser(): LiveData<DatabaseUser>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUser(user: DatabaseUser)
+
+    @Query("DELETE FROM database_user")
+    fun clearAllUsers()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertHeight(vararg height: DatabaseHeight)
+
+    @Query("SELECT * FROM database_height")
+    fun getHeightList() : LiveData<List<DatabaseHeight>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertWeight(vararg weight: DatabaseWeight)
+
+    @Query("SELECT * FROM database_weight")
+    fun getWeightList() : LiveData<List<DatabaseWeight>>
 }
 
 @Database(
@@ -106,12 +114,15 @@ interface ExerciseDao {
         DatabaseEquipment::class,
         DatabaseExerciseEquipment::class,
         DatabaseMuscle::class,
-        DatabaseExerciseMuscle::class
+        DatabaseExerciseMuscle::class,
+        DatabaseUser::class,
+        DatabaseHeight::class,
+        DatabaseWeight::class
     ],
     version = DATABASE_VERSION,
     exportSchema = false
 )
-@TypeConverters(ListConverter::class)
+@TypeConverters(ListConverter::class, DateConverter::class)
 abstract class ExerciseDatabase : RoomDatabase() {
     abstract val exerciseDao: ExerciseDao
 }

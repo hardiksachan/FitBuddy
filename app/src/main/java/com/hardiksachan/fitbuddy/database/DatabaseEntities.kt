@@ -4,11 +4,10 @@ import androidx.lifecycle.Transformations
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.hardiksachan.fitbuddy.domain.Equipment
-import com.hardiksachan.fitbuddy.domain.Exercise
-import com.hardiksachan.fitbuddy.domain.ExerciseCategory
-import com.hardiksachan.fitbuddy.domain.Muscle
+import androidx.room.TypeConverters
+import com.hardiksachan.fitbuddy.domain.*
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
+import java.util.*
 
 @Entity(tableName = "database_exercise")
 data class DatabaseExercise constructor(
@@ -60,13 +59,15 @@ data class DatabaseExerciseEquipment constructor(
     val exerciseId: Int
 )
 
-@Entity(tableName = "database_exercise_muscle",
+@Entity(
+    tableName = "database_exercise_muscle",
     foreignKeys = [ForeignKey(
         entity = DatabaseExercise::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("exerciseId"),
         onDelete = ForeignKey.CASCADE
-    )])
+    )]
+)
 data class DatabaseExerciseMuscle constructor(
 
     @PrimaryKey(autoGenerate = true)
@@ -74,6 +75,38 @@ data class DatabaseExerciseMuscle constructor(
     val muscleId: Int,
     val exerciseId: Int,
     val isSecondary: Boolean
+)
+
+@Entity(tableName = "database_user")
+data class DatabaseUser constructor(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String,
+    val gender: Int,
+    val dob: Date
+
+) {
+    fun asDomainModel(): User {
+        return User(
+            name, gender, dob
+        )
+    }
+}
+
+@Entity(tableName = "database_height")
+data class DatabaseHeight constructor(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var height: Int,
+    var date: Date
+)
+
+@Entity(tableName = "database_weight")
+data class DatabaseWeight constructor(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    var weight: Int = -1,
+    var date: Date
 )
 
 @JvmName("asDomainModelDatabaseExercise")
@@ -127,6 +160,26 @@ fun List<DatabaseMuscle>.asDomainModel(): List<Muscle> {
         Muscle(
             id = it.id,
             name = it.name
+        )
+    }
+}
+
+@JvmName("asDatabaseModelHeight")
+fun List<DatabaseHeight>.asDomainModel() : List<Height> {
+    return map {
+        Height(
+            height = it.height,
+            date = it.date
+        )
+    }
+}
+
+
+fun List<DatabaseWeight>.asDomainModel() : List<Weight> {
+    return map {
+        Weight(
+            weight = it.weight,
+            date = it.date
         )
     }
 }

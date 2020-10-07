@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/first_run_nav_graph"
+    app:startDestination="@id/nameFragment">
+    <fragment
+        android:id="@+id/nameFragment"
+        android:name="com.hardiksachan.fitbuddy.firstRun.NameFragment"
+        android:label="fragment_name"
+        tools:layout="@layout/fragment_name" >
+        <action
+            android:id="@+id/action_nameFragment_to_genderFragment"
+            app:destination="@id/genderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/genderFragment"
+        android:name="com.hardiksachan.fitbuddy.firstRun.GenderFragment"
+        android:label="GenderFragment" >
+        <action
+            android:id="@+id/action_genderFragment_to_DOBFragment"
+            app:destination="@id/DOBFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/DOBFragment"
+        android:name="com.hardiksachan.fitbuddy.firstRun.DOBFragment"
+        android:label="DOBFragment" >
+        <action
+            android:id="@+id/action_DOBFragment_to_heightWeightFragment"
+            app:destination="@id/heightWeightFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/heightWeightFragment"
+        android:name="com.hardiksachan.fitbuddy.firstRun.HeightWeightFragment"
+        android:label="HeightWeightFragment" />
+</navigation>

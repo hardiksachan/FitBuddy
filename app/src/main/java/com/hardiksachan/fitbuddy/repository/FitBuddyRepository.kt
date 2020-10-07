@@ -88,6 +88,21 @@ class FitBuddyRepository(private val applicationContext: Context) {
             it.asDomainModel()
         }
 
+    val user: LiveData<User> =
+        Transformations.map(database.exerciseDao.getUser()) {
+            it.asDomainModel()
+        }
+
+    val weightList : LiveData<List<Weight>> =
+        Transformations.map(database.exerciseDao.getWeightList()){
+            it.asDomainModel()
+        }
+
+    val heightList : LiveData<List<Height>> =
+        Transformations.map(database.exerciseDao.getHeightList()){
+            it.asDomainModel()
+        }
+
     fun getExerciseCategoryFromId(id: Int) = database.exerciseDao.getExerciseCategoryNameFromId(id)
 
     fun getEquipmentFromId(id: Int) = database.exerciseDao.getEquipmentNameFromId(id)
@@ -106,6 +121,29 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     fun deleteAllMusclesOfExercise(exerciseId: Int) =
         database.exerciseDao.clearMusclesForExercise(exerciseId)
+
+    suspend fun insertUser(user: User) {
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.clearAllUsers()
+            database.exerciseDao.insertUser(user.asDatabaseModel())
+        }
+    }
+
+    suspend fun insertHeights(h: List<Height>){
+        withContext(Dispatchers.IO){
+            database.exerciseDao.insertHeight(*h.asDatabaseModel().toTypedArray())
+        }
+    }
+
+
+    suspend fun insertWeights(w: List<Weight>){
+        withContext(Dispatchers.IO){
+            database.exerciseDao.insertWeight(*w.asDatabaseModel().toTypedArray())
+        }
+    }
+
+
+
 
     suspend fun saveExerciseEquipment(equipment: List<Int>?, id: Int?) {
         val equipment = if (equipment == null || equipment.isEmpty()) {

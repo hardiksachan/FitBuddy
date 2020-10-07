@@ -1,8 +1,14 @@
 package com.hardiksachan.fitbuddy.domain
 
 import androidx.lifecycle.LiveData
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.hardiksachan.fitbuddy.database.DatabaseExercise
+import com.hardiksachan.fitbuddy.database.DatabaseHeight
+import com.hardiksachan.fitbuddy.database.DatabaseUser
+import com.hardiksachan.fitbuddy.database.DatabaseWeight
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
+import java.util.*
 
 
 data class Exercise(
@@ -33,15 +39,48 @@ data class Muscle constructor(
     val name: String
 )
 
-fun List<Exercise>.asDomainModel(): List<DatabaseExercise> {
+
+data class User constructor(
+    var name: String = "",
+    var gender: Int = -1,
+    var dob: Date = Date()
+) {
+    fun asDatabaseModel(): DatabaseUser {
+        return DatabaseUser(
+            name = name,
+            gender = gender,
+            dob = dob
+        )
+    }
+}
+
+
+data class Height constructor(
+    var height: Int,
+    var date: Date = Date()
+)
+
+data class Weight constructor(
+    var weight: Int = -1,
+    var date: Date = Date()
+)
+
+@JvmName("asDatabaseModelHeight")
+fun List<Height>.asDatabaseModel() : List<DatabaseHeight> {
     return map {
-        DatabaseExercise(
-            license_author = it.license_author,
-            status = it.status,
-            description = it.description,
-            name = it.name,
-            category = it.category,
-            language = it.language
+        DatabaseHeight(
+            height = it.height,
+            date = it.date
+        )
+    }
+}
+
+
+fun List<Weight>.asDatabaseModel() : List<DatabaseWeight> {
+    return map {
+        DatabaseWeight(
+            weight = it.weight,
+            date = it.date
         )
     }
 }
