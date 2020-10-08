@@ -8,6 +8,7 @@ import com.hardiksachan.fitbuddy.database.DatabaseHeight
 import com.hardiksachan.fitbuddy.database.DatabaseUser
 import com.hardiksachan.fitbuddy.database.DatabaseWeight
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
+import java.time.DayOfWeek
 import java.util.*
 
 
@@ -63,6 +64,14 @@ data class Height constructor(
 data class Weight constructor(
     var weight: Float = -1f,
     var date: Date = Date()
+)
+
+data class ExerciseDay constructor(
+    var exercise: LiveData<Exercise>,
+    var id: Int,
+    var sets: Int,
+    var reps: Int,
+    var day: Int
 )
 
 @JvmName("asDatabaseModelHeight")

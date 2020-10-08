@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/mainDashboardFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.MainDashboardFragment"
-        android:label="MainDashboardFragment" />
+        android:label="MainDashboardFragment" >
+        <action
+            android:id="@+id/action_mainDashboardFragment_to_exerciseByDayFragment"
+            app:destination="@id/exerciseByDayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseByDayFragment"
+        android:name="com.hardiksachan.fitbuddy.dashboard.ExerciseByDayFragment"
+        android:label="ExerciseByDayFragment" />
 </navigation>

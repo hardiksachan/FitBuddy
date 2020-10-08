@@ -24,4 +24,6 @@
     <string name="unit_cm">cm</string>
     <string name="age_format_years">%d yrs</string>
     <string name="submit">SUBMIT</string>
+    <string name="exercise">Exercise</string>
+    <string name="add_exercise">Add Exercise</string>
 </resources>

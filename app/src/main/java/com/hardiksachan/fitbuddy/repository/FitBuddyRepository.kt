@@ -73,6 +73,12 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     }
 
+    fun getExerciseByDay(day: Int): LiveData<List<Exercise>> {
+        return Transformations.map(database.exerciseDao.getExerciseByDay(day)) {
+            it.asDomainModel(this)
+        }
+    }
+
     val exerciseCategories: LiveData<List<ExerciseCategory>> =
         Transformations.map(database.exerciseDao.getExerciseCategories()) {
             it.asDomainModel()
@@ -93,13 +99,13 @@ class FitBuddyRepository(private val applicationContext: Context) {
             it.asDomainModel()
         }
 
-    val weightList : LiveData<List<Weight>> =
-        Transformations.map(database.exerciseDao.getWeightList()){
+    val weightList: LiveData<List<Weight>> =
+        Transformations.map(database.exerciseDao.getWeightList()) {
             it.asDomainModel()
         }
 
-    val heightList : LiveData<List<Height>> =
-        Transformations.map(database.exerciseDao.getHeightList()){
+    val heightList: LiveData<List<Height>> =
+        Transformations.map(database.exerciseDao.getHeightList()) {
             it.asDomainModel()
         }
 
@@ -107,6 +113,8 @@ class FitBuddyRepository(private val applicationContext: Context) {
     val currentHeight = database.exerciseDao.getCurrentHeight()
 
     fun getExerciseCategoryFromId(id: Int) = database.exerciseDao.getExerciseCategoryNameFromId(id)
+
+    fun getExerciseFromId(id: Int) = database.exerciseDao.getExerciseFromId(id)
 
     fun getEquipmentFromId(id: Int) = database.exerciseDao.getEquipmentNameFromId(id)
 
@@ -132,20 +140,38 @@ class FitBuddyRepository(private val applicationContext: Context) {
         }
     }
 
-    suspend fun insertHeights(h: List<Height>){
-        withContext(Dispatchers.IO){
+    suspend fun insertHeights(h: List<Height>) {
+        withContext(Dispatchers.IO) {
             database.exerciseDao.insertHeight(*h.asDatabaseModel().toTypedArray())
         }
     }
 
 
-    suspend fun insertWeights(w: List<Weight>){
-        withContext(Dispatchers.IO){
+    suspend fun insertWeights(w: List<Weight>) {
+        withContext(Dispatchers.IO) {
             database.exerciseDao.insertWeight(*w.asDatabaseModel().toTypedArray())
         }
     }
 
+    suspend fun insertExerciseDayByDay(day: Int, exerciseId: Int, sets: Int, reps: Int) {
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.insertExerciseDayByDay(
+                DatabaseExerciseByDay(
+                    day = day,
+                    exerciseId = exerciseId,
+                    sets = sets,
+                    reps = reps
+                )
+            )
+        }
+    }
 
+//    suspend fun insertExerciseDayByExercise(exerciseId: Int, sets: Int, reps: Int) {
+//        withContext(Dispatchers.IO) {
+//            database.exerciseDao.insertExerciseDayByExercise(exerciseId, sets, reps)
+//            Timber.i("Exercise Added!!!!! by day")
+//        }
+//    }
 
 
     suspend fun saveExerciseEquipment(equipment: List<Int>?, id: Int?) {

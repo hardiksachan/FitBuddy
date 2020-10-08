@@ -45,6 +45,8 @@
         android:label="ExerciseDetailFragment" >
         <action
             android:id="@+id/action_exerciseDetailFragment_to_exerciseSelectorFragment"
-            app:destination="@id/exerciseSelectorFragment" />
+            app:destination="@id/exerciseSelectorFragment"
+            app:popUpTo="@id/exerciseSelectorFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

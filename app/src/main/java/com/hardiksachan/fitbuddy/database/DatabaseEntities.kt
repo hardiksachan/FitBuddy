@@ -4,7 +4,6 @@ import androidx.lifecycle.Transformations
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.hardiksachan.fitbuddy.domain.*
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import java.util.*
@@ -109,6 +108,28 @@ data class DatabaseWeight constructor(
     var date: Date
 )
 
+@Entity(tableName = "database_exercise_by_day")
+data class DatabaseExerciseByDay constructor(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val day: Int,
+    val exerciseId: Int? = null,
+    val sets: Int? = null,
+    val reps: Int? = null
+) {
+    fun asDomainModel(repository: FitBuddyRepository): ExerciseDay {
+        return ExerciseDay(
+            exercise = Transformations.map(repository.getExerciseFromId(exerciseId?: -255)) {
+                listOf(it).asDomainModel(repository)[0]
+            },
+            id = id,
+            sets = sets ?: 0,
+            reps = reps ?: 0,
+            day = day
+        )
+    }
+}
+
 @JvmName("asDomainModelDatabaseExercise")
 fun List<DatabaseExercise>.asDomainModel(repository: FitBuddyRepository): List<Exercise> {
     return map {
@@ -165,7 +186,7 @@ fun List<DatabaseMuscle>.asDomainModel(): List<Muscle> {
 }
 
 @JvmName("asDatabaseModelHeight")
-fun List<DatabaseHeight>.asDomainModel() : List<Height> {
+fun List<DatabaseHeight>.asDomainModel(): List<Height> {
     return map {
         Height(
             height = it.height,
@@ -175,7 +196,7 @@ fun List<DatabaseHeight>.asDomainModel() : List<Height> {
 }
 
 
-fun List<DatabaseWeight>.asDomainModel() : List<Weight> {
+fun List<DatabaseWeight>.asDomainModel(): List<Weight> {
     return map {
         Weight(
             weight = it.weight,

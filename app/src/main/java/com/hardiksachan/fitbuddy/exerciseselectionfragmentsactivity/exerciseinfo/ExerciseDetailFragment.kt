@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseDetailBinding
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivity
 import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
+import kotlinx.coroutines.launch
 
 class ExerciseDetailFragment : Fragment() {
 
@@ -40,15 +43,29 @@ class ExerciseDetailFragment : Fragment() {
 
         binding.viewPagerExerciseDetail.setCurrentItem(selectedExerciseIndex ?: 0, false)
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                binding.root.findNavController()
-                    .navigate(
-                        ExerciseDetailFragmentDirections
-                            .actionExerciseDetailFragmentToExerciseSelectorFragment()
-                    )
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    binding.root.findNavController()
+                        .navigate(
+                            ExerciseDetailFragmentDirections
+                                .actionExerciseDetailFragmentToExerciseSelectorFragment()
+                        )
+                }
+            })
+
+        binding.btnAddExercise.setOnClickListener {
+            val exId = adapter.currentList[binding.viewPagerExerciseDetail.currentItem].id
+            sharedViewModel.viewModelScope.launch {
+                sharedViewModel.fitBuddyRepository.insertExerciseDayByDay(
+                    (requireActivity() as MainActivity).prefs.getInt("exerciseAddDay", -1),
+                    exId,
+                    3,
+                    15
+                )
             }
-        })
+        }
 
 
         return binding.root

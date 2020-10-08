@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-private const val DATABASE_VERSION = 15
+private const val DATABASE_VERSION = 18
 
 private const val SEARCH_QUERY =
     "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText)) ORDER BY name"
@@ -29,6 +29,9 @@ interface ExerciseDao {
         secondaryMuscles: List<Int>,
         searchText: String
     ): LiveData<List<DatabaseExercise>>
+
+    @Query("SELECT * FROM database_exercise WHERE id = :id")
+    fun getExerciseFromId(id: Int): LiveData<DatabaseExercise>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -98,19 +101,25 @@ interface ExerciseDao {
     fun insertHeight(vararg height: DatabaseHeight)
 
     @Query("SELECT * FROM database_height")
-    fun getHeightList() : LiveData<List<DatabaseHeight>>
+    fun getHeightList(): LiveData<List<DatabaseHeight>>
 
     @Query("SELECT height FROM database_height ORDER BY id DESC LIMIT 1")
-    fun getCurrentHeight() : LiveData<Int>
+    fun getCurrentHeight(): LiveData<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWeight(vararg weight: DatabaseWeight)
 
     @Query("SELECT * FROM database_weight")
-    fun getWeightList() : LiveData<List<DatabaseWeight>>
+    fun getWeightList(): LiveData<List<DatabaseWeight>>
 
     @Query("SELECT weight FROM database_weight ORDER BY id DESC LIMIT 1")
-    fun getCurrentWeight() : LiveData<Float>
+    fun getCurrentWeight(): LiveData<Float>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertExerciseDayByDay(exerciseByDay: DatabaseExerciseByDay)
+
+    @Query("SELECT * FROM database_exercise WHERE id in (SELECT exerciseId FROM database_exercise_by_day WHERE day = :day)")
+    fun getExerciseByDay(day: Int): LiveData<List<DatabaseExercise>>
 }
 
 @Database(
@@ -123,7 +132,8 @@ interface ExerciseDao {
         DatabaseExerciseMuscle::class,
         DatabaseUser::class,
         DatabaseHeight::class,
-        DatabaseWeight::class
+        DatabaseWeight::class,
+        DatabaseExerciseByDay::class
     ],
     version = DATABASE_VERSION,
     exportSchema = false

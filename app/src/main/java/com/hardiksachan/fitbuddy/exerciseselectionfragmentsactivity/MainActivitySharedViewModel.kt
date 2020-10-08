@@ -15,7 +15,7 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     val eventUpdateExerciseLiveDataObserver: LiveData<Boolean>
         get() = _eventUpdateExerciseLiveDataObserver
 
-    private val fitBuddyRepository = FitBuddyRepository(application)
+    val fitBuddyRepository = FitBuddyRepository(application)
 
     private var exerciseToDisplayOnDetail: Exercise? = null
 
