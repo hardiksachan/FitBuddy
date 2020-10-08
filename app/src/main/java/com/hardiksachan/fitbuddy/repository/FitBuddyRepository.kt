@@ -103,6 +103,9 @@ class FitBuddyRepository(private val applicationContext: Context) {
             it.asDomainModel()
         }
 
+    val currentWeight = database.exerciseDao.getCurrentWeight()
+    val currentHeight = database.exerciseDao.getCurrentHeight()
+
     fun getExerciseCategoryFromId(id: Int) = database.exerciseDao.getExerciseCategoryNameFromId(id)
 
     fun getEquipmentFromId(id: Int) = database.exerciseDao.getEquipmentNameFromId(id)

@@ -61,7 +61,7 @@ data class Height constructor(
 )
 
 data class Weight constructor(
-    var weight: Int = -1,
+    var weight: Float = -1f,
     var date: Date = Date()
 )
 

@@ -61,7 +61,7 @@
             android:layout_marginStart="@dimen/spacing_large"
             android:layout_marginEnd="@dimen/spacing_large"
             android:hint="Weight (in kg)"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/btn_next"
             app:layout_constraintEnd_toEndOf="parent"

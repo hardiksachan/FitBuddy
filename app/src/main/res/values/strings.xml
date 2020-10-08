@@ -13,4 +13,15 @@
     <string name="no_results_found">No Results Found</string>
     <string name="num_results_found">%d Results</string>
     <string name="watch_tutorial">Watch Tutorial</string>
+    <string name="age">Age</string>
+    <string name="age_container">27 yrs</string>
+    <string name="update">UPDATE</string>
+    <string name="wt_format">86 Kg</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="ht_format">165 cm</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_cm">cm</string>
+    <string name="age_format_years">%d yrs</string>
+    <string name="submit">SUBMIT</string>
 </resources>

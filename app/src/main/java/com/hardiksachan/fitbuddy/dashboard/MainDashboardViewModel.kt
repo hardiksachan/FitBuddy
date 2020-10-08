@@ -1,4 +1,4 @@
-package com.hardiksachan.fitbuddy.firstRun
+package com.hardiksachan.fitbuddy.dashboard
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -6,26 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.hardiksachan.fitbuddy.domain.Height
-import com.hardiksachan.fitbuddy.domain.User
 import com.hardiksachan.fitbuddy.domain.Weight
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.util.*
 
-class FirstRunActivitySharedViewModel(application: Application) : AndroidViewModel(application) {
-
-    val user = User()
+class MainDashboardViewModel(application: Application) : AndroidViewModel(application) {
 
     private val fitBuddyRepository = FitBuddyRepository(application)
 
-    fun saveUser(){
-        viewModelScope.launch {
-            fitBuddyRepository.insertUser(user)
-        }
-    }
+    val user = fitBuddyRepository.user
+    val weightList = fitBuddyRepository.weightList
+    val currentWeight = fitBuddyRepository.currentWeight
+    val heightList = fitBuddyRepository.heightList
+    val currentHeight = fitBuddyRepository.currentHeight
 
-    fun saveHeight(h: List<Int>){
+
+    fun updateHeight(h: List<Int>){
         viewModelScope.launch {
             fitBuddyRepository.insertHeights(h.map {
                 Height(
@@ -36,7 +33,7 @@ class FirstRunActivitySharedViewModel(application: Application) : AndroidViewMod
         }
     }
 
-    fun saveWeight(w: List<Float>){
+    fun updateWeight(w: List<Float>){
         viewModelScope.launch {
             fitBuddyRepository.insertWeights(w.map {
                 Weight(
@@ -47,11 +44,10 @@ class FirstRunActivitySharedViewModel(application: Application) : AndroidViewMod
         }
     }
 
-
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(FirstRunActivitySharedViewModel::class.java)) {
-                return FirstRunActivitySharedViewModel(application) as T
+            if (modelClass.isAssignableFrom(MainDashboardViewModel::class.java)) {
+                return MainDashboardViewModel(application) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

@@ -100,11 +100,17 @@ interface ExerciseDao {
     @Query("SELECT * FROM database_height")
     fun getHeightList() : LiveData<List<DatabaseHeight>>
 
+    @Query("SELECT height FROM database_height ORDER BY id DESC LIMIT 1")
+    fun getCurrentHeight() : LiveData<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWeight(vararg weight: DatabaseWeight)
 
     @Query("SELECT * FROM database_weight")
     fun getWeightList() : LiveData<List<DatabaseWeight>>
+
+    @Query("SELECT weight FROM database_weight ORDER BY id DESC LIMIT 1")
+    fun getCurrentWeight() : LiveData<Float>
 }
 
 @Database(

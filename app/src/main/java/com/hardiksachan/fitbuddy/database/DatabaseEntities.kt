@@ -105,7 +105,7 @@ data class DatabaseHeight constructor(
 data class DatabaseWeight constructor(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var weight: Int = -1,
+    var weight: Float = -1f,
     var date: Date
 )
 

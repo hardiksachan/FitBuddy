@@ -38,7 +38,7 @@ class HeightWeightFragment : Fragment() {
                     binding.etWeight.text.toString() != "") {
                 // set in database
                 sharedViewModel.saveHeight(listOf(binding.etHeight.text.toString().toInt()))
-                sharedViewModel.saveWeight(listOf(binding.etWeight.text.toString().toInt()))
+                sharedViewModel.saveWeight(listOf(binding.etWeight.text.toString().toFloat()))
 
                 // Save first run done in prefs
                 prefs.edit().putBoolean("firstrun", false).apply()
