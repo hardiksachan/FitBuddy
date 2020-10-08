@@ -30,10 +30,20 @@ class ExerciseByDayViewPagerAdapter(
         fun bind(
             item: DayOfWeek,
             repository: FitBuddyRepository,
-            viewModelScope: CoroutineScope,
             activity: DashboardActivity
         ) {
             binding.tvDayName.text = item.name
+
+            val adapter = ExerciseListByDayAdapter(binding.lifecycleOwner!!,
+                ExerciseListByDayAdapter.OnClickListener {
+                // TODO: Open exercise description
+            })
+            binding.rvExerciseListByDay.adapter = adapter
+
+            repository.getExerciseDayByDay(item.ordinal).observe(binding.lifecycleOwner!!, {
+                adapter.submitList(it)
+            })
+
             binding.btnAddExercise.setOnClickListener {
                 activity.prefs.edit().putInt("exerciseAddDay", item.ordinal).apply()
                 val intent = Intent(activity, MainActivity::class.java)
@@ -63,7 +73,7 @@ class ExerciseByDayViewPagerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val day = DayOfWeek.values()[position]
-        holder.bind(day, repository, viewModelScope, activity)
+        holder.bind(day, repository,  activity)
     }
 
     override fun getItemCount(): Int {

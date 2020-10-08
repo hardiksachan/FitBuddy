@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
+import kotlinx.coroutines.launch
 
 class ExerciseByDayViewModel(application: Application) : AndroidViewModel(application) {
 

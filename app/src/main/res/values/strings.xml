@@ -29,4 +29,5 @@
     <string name="exercise_sets">Sets</string>
     <string name="exercise_reps">Reps</string>
     <string name="exercise_selected">Selected</string>
+    <string name="edit_sets_reps">EDIT</string>
 </resources>

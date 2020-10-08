@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
 
@@ -15,7 +16,9 @@
         <TextView
             android:id="@+id/tv_day_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".08"
+            android:gravity="center"
             android:padding="@dimen/spacing_small"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceHeadline5"
@@ -23,15 +26,25 @@
             tools:text="MONDAY" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_exercise_list_by_day"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/spacing_small"
+            android:layout_weight=".84"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="6"
+            tools:listitem="@layout/recyclervire_item_exercise_by_day" />
+
+        <include layout="@layout/horizontal_divider" />
 
         <Button
             android:id="@+id/btn_add_exercise"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="@dimen/spacing_normal"
+            android:layout_weight=".08"
             android:text="@string/add_exercise" />
 
 

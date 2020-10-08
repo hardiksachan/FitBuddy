@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_small"
+        android:padding="@dimen/spacing_small"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/stroke_color"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_normal">
+
+            <!-- Title, secondary and supporting text -->
+            <TextView
+                android:id="@+id/tv_exercise_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                tools:text="Crunches" />
+
+            <TextView
+                android:id="@+id/tv_exercise_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:layout_marginBottom="@dimen/spacing_normal"
+                tools:text="Category: Abs" />
+
+            <include layout="@layout/horizontal_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/spacing_small"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_small"
+                    android:layout_weight=".2"
+                    android:text="@string/exercise_sets"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceBody1" />
+
+                <TextView
+                    android:id="@+id/tv_sets_num"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_small"
+                    android:layout_weight=".1"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    tools:text="3"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_small"
+                    android:layout_weight=".2"
+                    android:text="@string/exercise_reps"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceBody1" />
+
+                <TextView
+                    android:id="@+id/tv_reps_num"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_small"
+                    android:layout_weight=".1"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    tools:text="12"
+                    android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/btn_edit_sets_reps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    style="?attr/borderlessButtonStyle"
+                    android:text="@string/edit_sets_reps"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

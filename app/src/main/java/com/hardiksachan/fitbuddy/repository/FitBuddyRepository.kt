@@ -73,9 +73,11 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     }
 
-    fun getExerciseByDay(day: Int): LiveData<List<Exercise>> {
+    fun getExerciseDayByDay(day: Int): LiveData<List<ExerciseDay>> {
         return Transformations.map(database.exerciseDao.getExerciseByDay(day)) {
-            it.asDomainModel(this)
+            it.map { exerciseDay ->
+                exerciseDay.asDomainModel(this)
+            }
         }
     }
 

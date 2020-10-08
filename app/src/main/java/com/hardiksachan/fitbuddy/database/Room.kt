@@ -118,8 +118,8 @@ interface ExerciseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertExerciseDayByDay(exerciseByDay: DatabaseExerciseByDay)
 
-    @Query("SELECT * FROM database_exercise WHERE id in (SELECT exerciseId FROM database_exercise_by_day WHERE day = :day)")
-    fun getExerciseByDay(day: Int): LiveData<List<DatabaseExercise>>
+    @Query("SELECT * FROM database_exercise_by_day WHERE day = :day")
+    fun getExerciseByDay(day: Int): LiveData<List<DatabaseExerciseByDay>>
 
     @Query("SELECT exerciseId FROM database_exercise_by_day WHERE day = :day")
     fun getExerciseIdListOfDay(day: Int) : LiveData<List<Int>>
