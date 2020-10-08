@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.hardiksachan.fitbuddy.databinding.ExerciseByDayFragmentBinding
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 import java.util.*
 
 class ExerciseByDayFragment : Fragment() {
@@ -16,6 +18,11 @@ class ExerciseByDayFragment : Fragment() {
         val activity = requireNotNull(this.activity)
         ViewModelProvider(this, ExerciseByDayViewModel.Factory(activity.application))
             .get(ExerciseByDayViewModel::class.java)
+    }
+
+    val sharedViewModel: DashboardActivitySharedViewModel by activityViewModels<DashboardActivitySharedViewModel> {
+        val activity = requireNotNull(this.activity)
+        DashboardActivitySharedViewModel.Factory(activity.application)
     }
 
     override fun onCreateView(
@@ -27,7 +34,7 @@ class ExerciseByDayFragment : Fragment() {
         val adapter = ExerciseByDayViewPagerAdapter(
             viewLifecycleOwner,
             viewModel.fitBuddyRepository,
-            viewModel.viewModelScope,
+            sharedViewModel,
             requireActivity() as DashboardActivity
         )
         binding.viewPagerDay.adapter = adapter

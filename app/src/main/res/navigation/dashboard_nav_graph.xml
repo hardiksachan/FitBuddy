@@ -14,5 +14,13 @@
     <fragment
         android:id="@+id/exerciseByDayFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.ExerciseByDayFragment"
-        android:label="ExerciseByDayFragment" />
+        android:label="ExerciseByDayFragment" >
+        <action
+            android:id="@+id/action_exerciseByDayFragment_to_selectedExerciseDetailFragment"
+            app:destination="@id/selectedExerciseDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectedExerciseDetailFragment"
+        android:name="com.hardiksachan.fitbuddy.dashboard.SelectedExerciseDetailFragment"
+        android:label="SelectedExerciseDetailFragment" />
 </navigation>

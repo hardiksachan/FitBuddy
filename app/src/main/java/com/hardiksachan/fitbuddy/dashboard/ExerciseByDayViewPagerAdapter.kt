@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.hardiksachan.fitbuddy.databinding.Viewpager2ItemExerciseByDayBinding
 import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivity
@@ -17,7 +18,7 @@ import java.time.DayOfWeek
 class ExerciseByDayViewPagerAdapter(
     private val parentLifecycleOwner: LifecycleOwner,
     private val repository: FitBuddyRepository,
-    private val viewModelScope: CoroutineScope,
+    private val sharedViewModel: DashboardActivitySharedViewModel,
     private val activity: DashboardActivity
 ) :
     RecyclerView.Adapter<ExerciseByDayViewPagerAdapter.ViewHolder>() {
@@ -30,13 +31,21 @@ class ExerciseByDayViewPagerAdapter(
         fun bind(
             item: DayOfWeek,
             repository: FitBuddyRepository,
-            activity: DashboardActivity
+            activity: DashboardActivity,
+            sharedViewModel: DashboardActivitySharedViewModel
         ) {
             binding.tvDayName.text = item.name
 
             val adapter = ExerciseListByDayAdapter(binding.lifecycleOwner!!,
                 ExerciseListByDayAdapter.OnClickListener {
-                // TODO: Open exercise description
+                it.exercise.observe(binding.lifecycleOwner!!, {
+                    sharedViewModel.exercise = it
+                    binding.root.findNavController()
+                        .navigate(
+                            ExerciseByDayFragmentDirections
+                                .actionExerciseByDayFragmentToSelectedExerciseDetailFragment()
+                        )
+                })
             })
             binding.rvExerciseListByDay.adapter = adapter
 
@@ -73,7 +82,7 @@ class ExerciseByDayViewPagerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val day = DayOfWeek.values()[position]
-        holder.bind(day, repository,  activity)
+        holder.bind(day, repository,  activity, sharedViewModel)
     }
 
     override fun getItemCount(): Int {
