@@ -123,6 +123,12 @@ interface ExerciseDao {
 
     @Query("SELECT exerciseId FROM database_exercise_by_day WHERE day = :day")
     fun getExerciseIdListOfDay(day: Int) : LiveData<List<Int>>
+
+    @Update
+    fun updateExerciseByDat(exerciseByDay: DatabaseExerciseByDay)
+
+    @Query("DELETE FROM database_exercise_by_day WHERE id = :id")
+    fun deleteExerciseDaybyId(id: Int)
 }
 
 @Database(

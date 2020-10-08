@@ -46,7 +46,7 @@ class ExerciseByDayViewPagerAdapter(
                                 .actionExerciseByDayFragmentToSelectedExerciseDetailFragment()
                         )
                 })
-            })
+            }, sharedViewModel)
             binding.rvExerciseListByDay.adapter = adapter
 
             repository.getExerciseDayByDay(item.ordinal).observe(binding.lifecycleOwner!!, {

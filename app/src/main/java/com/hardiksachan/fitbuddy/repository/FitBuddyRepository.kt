@@ -172,12 +172,25 @@ class FitBuddyRepository(private val applicationContext: Context) {
         }
     }
 
-//    suspend fun insertExerciseDayByExercise(exerciseId: Int, sets: Int, reps: Int) {
-//        withContext(Dispatchers.IO) {
-//            database.exerciseDao.insertExerciseDayByExercise(exerciseId, sets, reps)
-//            Timber.i("Exercise Added!!!!! by day")
-//        }
-//    }
+    suspend fun deleteExerciseDay(id: Int){
+        withContext(Dispatchers.IO){
+            database.exerciseDao.deleteExerciseDaybyId(id)
+        }
+    }
+
+    suspend fun updateExerciseDay(exerciseDay: ExerciseDay){
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.updateExerciseByDat(
+                DatabaseExerciseByDay(
+                    id = exerciseDay.id,
+                    exerciseId = exerciseDay.exercise.value!!.id,
+                    sets = exerciseDay.sets,
+                    reps = exerciseDay.reps,
+                    day = exerciseDay.day
+                )
+            )
+        }
+    }
 
 
     suspend fun saveExerciseEquipment(equipment: List<Int>?, id: Int?) {

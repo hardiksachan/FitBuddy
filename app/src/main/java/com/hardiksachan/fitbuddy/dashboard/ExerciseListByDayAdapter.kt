@@ -1,20 +1,27 @@
 package com.hardiksachan.fitbuddy.dashboard
 
+import android.app.AlertDialog
+import android.text.Editable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hardiksachan.fitbuddy.R
+import com.hardiksachan.fitbuddy.databinding.DialogAddExerciseBinding
 import com.hardiksachan.fitbuddy.databinding.RecyclervireItemExerciseByDayBinding
 import com.hardiksachan.fitbuddy.domain.ExerciseDay
+import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivity
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 
 class ExerciseListByDayAdapter(
     val parentLifecycleOwner: LifecycleOwner,
-    val onClickListener: OnClickListener
+    val onClickListener: OnClickListener,
+    private val sharedViewModel: DashboardActivitySharedViewModel
 ) :
     ListAdapter<ExerciseDay, ExerciseListByDayAdapter.ViewHolder>(ExerciseDayDiffCallback()) {
     class ViewHolder private constructor(val binding: RecyclervireItemExerciseByDayBinding) :
@@ -30,7 +37,7 @@ class ExerciseListByDayAdapter(
             }
         }
 
-        fun bind(item: ExerciseDay) {
+        fun bind(item: ExerciseDay, sharedViewModel: DashboardActivitySharedViewModel) {
             item.exercise.observe(binding.lifecycleOwner!!, {
                 binding.tvExerciseName.text = it.name
                 FitBuddyRepository(binding.root.context.applicationContext)
@@ -46,6 +53,45 @@ class ExerciseListByDayAdapter(
             binding.tvRepsNum.text = item.reps.toString()
             binding.tvSetsNum.text = item.sets.toString()
 
+            binding.ivDeleteExerciseDay.setOnClickListener{
+                sharedViewModel.deleteExerciseDay(item.id)
+            }
+
+            binding.btnEditSetsReps.setOnClickListener {
+                val dialogBuilder: AlertDialog = AlertDialog.Builder(binding.root.context).create()
+                val dialogBinding =
+                    DialogAddExerciseBinding.inflate(LayoutInflater.from(binding.root.context))
+                val dialogView: View = dialogBinding.root
+
+                dialogBinding.tvHeading.text = binding.root.context.getString(R.string.update)
+
+                dialogBinding.etSets.setText(item.sets.toString())
+                dialogBinding.etReps.setText(item.reps.toString())
+
+                dialogBinding.btnCancel.setOnClickListener(View.OnClickListener { dialogBuilder.dismiss() })
+                dialogBinding.btnSubmit.setOnClickListener(View.OnClickListener {
+                    if (dialogBinding.etReps.text.toString() == "") {
+                        Toast.makeText(
+                            dialogBinding.root.context,
+                            "Please Enter Number Of Reps", Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (dialogBinding.etSets.text.toString() == "") {
+                        Toast.makeText(
+                            dialogBinding.root.context,
+                            "Please Enter Number Of Sets", Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        item.sets = dialogBinding.etSets.text.toString().toInt()
+                        item.reps = dialogBinding.etReps.text.toString().toInt()
+                        sharedViewModel.updateExerciseSetsReps(item)
+                        dialogBuilder.dismiss()
+                    }
+                })
+
+                dialogBuilder.setView(dialogView)
+                dialogBuilder.show()
+            }
+
         }
     }
 
@@ -55,7 +101,7 @@ class ExerciseListByDayAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), sharedViewModel)
         holder.itemView.setOnClickListener {
             onClickListener.onClick(getItem(position))
         }

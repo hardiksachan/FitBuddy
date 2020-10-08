@@ -20,22 +20,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_normal">
+            android:padding="@dimen/spacing_small">
 
-            <!-- Title, secondary and supporting text -->
-            <TextView
-                android:id="@+id/tv_exercise_name"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                tools:text="Crunches" />
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_small">
+
+                <TextView
+                    android:id="@+id/tv_exercise_name"
+                    android:layout_width="0dp"
+                    android:layout_weight=".9"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    tools:text="Crunches" />
+
+                <ImageView
+                    android:id="@+id/iv_delete_exercise_day"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    android:layout_width="0dp"
+                    android:layout_weight=".1"
+                    android:src="@drawable/ic_delete_white_24dp"
+                    android:layout_height="match_parent"
+                    app:tint="@android:color/black" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_exercise_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody2"
                 android:layout_marginBottom="@dimen/spacing_normal"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:textAppearance="?attr/textAppearanceBody2"
                 tools:text="Category: Abs" />
 
             <include layout="@layout/horizontal_divider" />
@@ -43,14 +61,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_small"
                     android:layout_weight=".2"
                     android:text="@string/exercise_sets"
                     android:textAlignment="center"
@@ -60,16 +76,14 @@
                     android:id="@+id/tv_sets_num"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_small"
-                    android:layout_weight=".1"
+                    android:layout_weight=".2"
+                    android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="3"
-                    android:textAlignment="center" />
+                    tools:text="3" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_small"
                     android:layout_weight=".2"
                     android:text="@string/exercise_reps"
                     android:textAlignment="center"
@@ -79,19 +93,18 @@
                     android:id="@+id/tv_reps_num"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_small"
-                    android:layout_weight=".1"
+                    android:layout_weight=".2"
+                    android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="12"
-                    android:textAlignment="center" />
+                    tools:text="12" />
 
                 <Button
                     android:id="@+id/btn_edit_sets_reps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/spacing_normal"
                     style="?attr/borderlessButtonStyle"
-                    android:text="@string/edit_sets_reps"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:text="@string/edit_sets_reps" />
             </LinearLayout>
         </LinearLayout>
 
