@@ -26,4 +26,7 @@
     <string name="submit">SUBMIT</string>
     <string name="exercise">Exercise</string>
     <string name="add_exercise">Add Exercise</string>
+    <string name="exercise_sets">Sets</string>
+    <string name="exercise_reps">Reps</string>
+    <string name="exercise_selected">Selected</string>
 </resources>

@@ -30,6 +30,13 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
     val equipments = fitBuddyRepository.equipments
     val muscles = fitBuddyRepository.muscles
 
+    val exerciseIdsOfSelectedDay = fitBuddyRepository.getExerciseIdByDay(
+        application.getSharedPreferences(
+            "com.hardiksachan.fitbuddy",
+            MODE_PRIVATE
+        ).getInt("exerciseAddDay", -1)
+    )
+
 //    val repositoryUpdated = fitBuddyRepository.repositoryUpdated
 //
 //    fun repositoryUpdateHandled() = fitBuddyRepository.onRepositoryUpdatedHandled()
