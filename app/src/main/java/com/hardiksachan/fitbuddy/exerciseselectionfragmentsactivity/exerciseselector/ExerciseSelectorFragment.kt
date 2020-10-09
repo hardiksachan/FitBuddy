@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -41,6 +42,9 @@ class ExerciseSelectorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentExerciseSelectorBinding.inflate(inflater, container, false)
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         binding.viewModel = viewModel
         val adapter = ExerciseListAdapter(viewLifecycleOwner, ExerciseListAdapter.OnClickListener {
             viewModel.navigateToDetail(it)

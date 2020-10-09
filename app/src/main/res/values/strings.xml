@@ -24,10 +24,11 @@
     <string name="unit_cm">cm</string>
     <string name="age_format_years">%d yrs</string>
     <string name="submit">SUBMIT</string>
-    <string name="exercise">Exercise</string>
+    <string name="workout_manager">Workout Manager</string>
     <string name="add_exercise">Add Exercise</string>
     <string name="exercise_sets">Sets</string>
     <string name="exercise_reps">Reps</string>
     <string name="exercise_selected">Selected</string>
     <string name="edit_sets_reps">EDIT</string>
+    <string name="dashboard">Dashboard</string>
 </resources>

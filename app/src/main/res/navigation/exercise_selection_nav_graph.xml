@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/exerciseSelectorFragment"
         android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.ExerciseSelectorFragment"
-        android:label="ExerciseSelectorFragment">
+        android:label="Exercises">
         <action
             android:id="@+id/action_exerciseSelectorFragment_to_exerciseFilterFragment"
             app:destination="@id/exerciseFilterFragment" />
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/exerciseFilterFragment"
         android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.ExerciseFilterByWhatFragment"
-        android:label="ExerciseFilterFragment">
+        android:label="Exercise Filter">
         <action
             android:id="@+id/action_exerciseFilterFragment_to_exerciseSelectorFragment"
             app:destination="@id/exerciseSelectorFragment"
@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/exerciseFilterSpecificFragment"
         android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.ExerciseFilterSpecificFragment"
-        android:label="ExerciseFilterSpecificFragment" >
+        android:label="Exercise Filter">
         <argument
             android:name="filterBy"
             app:argType="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseselector.exercisefilter.FilterByWhat" />
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/exerciseDetailFragment"
         android:name="com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseinfo.ExerciseDetailFragment"
-        android:label="ExerciseDetailFragment" >
+        android:label="Exercise Detail">
         <action
             android:id="@+id/action_exerciseDetailFragment_to_exerciseSelectorFragment"
             app:destination="@id/exerciseSelectorFragment"

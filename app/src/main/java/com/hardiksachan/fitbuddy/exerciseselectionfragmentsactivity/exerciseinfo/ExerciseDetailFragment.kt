@@ -3,6 +3,7 @@ package com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.exerciseinf
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -12,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.DialogAddExerciseBinding
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseDetailBinding
@@ -28,13 +28,15 @@ class ExerciseDetailFragment : Fragment() {
         MainActivitySharedViewModel.Factory(activity.application)
     }
 
+    lateinit var binding: FragmentExerciseDetailBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = FragmentExerciseDetailBinding.inflate(inflater)
+        binding = FragmentExerciseDetailBinding.inflate(inflater)
 
 
         val adapter = ExerciseDetailViewPagerAdapter(viewLifecycleOwner)

@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/mainDashboardFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.MainDashboardFragment"
-        android:label="MainDashboardFragment" >
+        android:label="@string/app_name">
         <action
             android:id="@+id/action_mainDashboardFragment_to_exerciseByDayFragment"
             app:destination="@id/exerciseByDayFragment" />
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/exerciseByDayFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.ExerciseByDayFragment"
-        android:label="ExerciseByDayFragment" >
+        android:label="Workout Manager">
         <action
             android:id="@+id/action_exerciseByDayFragment_to_selectedExerciseDetailFragment"
             app:destination="@id/selectedExerciseDetailFragment" />
@@ -28,13 +28,13 @@
     <fragment
         android:id="@+id/selectedExerciseDetailFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.SelectedExerciseDetailFragment"
-        android:label="SelectedExerciseDetailFragment" />
+        android:label="Exercise Detail" />
     <fragment
         android:id="@+id/weightGraphFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.WeightGraphFragment"
-        android:label="WeightGraphFragment" />
+        android:label="Weight" />
     <fragment
         android:id="@+id/heightGraphFragment"
         android:name="com.hardiksachan.fitbuddy.dashboard.HeightGraphFragment"
-        android:label="HeightGraphFragment" />
+        android:label="Height" />
 </navigation>
