@@ -38,8 +38,7 @@ class ExerciseDetailViewPagerAdapter(val parentLifecycleOwner: LifecycleOwner) :
             }
         }
 
-        private val viewHolderJob = Job()
-        private val viewHolderScope = CoroutineScope(viewHolderJob + Dispatchers.IO)
+
 
         fun bind(item: Exercise) {
 //            binding.exerciseItem = item

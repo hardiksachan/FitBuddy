@@ -123,6 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/spacing_normal"
+            android:backgroundTint="@color/secondaryColor"
             android:onClick="@{() -> viewModel.onFilterFabClicked()}"
             app:srcCompat="@drawable/ic_filter_alt_white" />
         

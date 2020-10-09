@@ -1,7 +1,6 @@
 package com.hardiksachan.fitbuddy.dashboard
 
 import android.app.AlertDialog
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,8 @@ import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.DialogAddExerciseBinding
 import com.hardiksachan.fitbuddy.databinding.RecyclervireItemExerciseByDayBinding
 import com.hardiksachan.fitbuddy.domain.ExerciseDay
-import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivity
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
+
 
 class ExerciseListByDayAdapter(
     val parentLifecycleOwner: LifecycleOwner,
@@ -53,8 +52,22 @@ class ExerciseListByDayAdapter(
             binding.tvRepsNum.text = item.reps.toString()
             binding.tvSetsNum.text = item.sets.toString()
 
-            binding.ivDeleteExerciseDay.setOnClickListener{
-                sharedViewModel.deleteExerciseDay(item.id)
+
+            binding.ivDeleteExerciseDay.setOnClickListener {
+                val alertDialog: AlertDialog.Builder = AlertDialog.Builder(binding.root.context)
+                alertDialog.setTitle("Confirm Delete")
+                alertDialog.setMessage("Do you want to delete this exercise?")
+                alertDialog.setPositiveButton(
+                    "Yes"
+                ) { _, _ ->
+                    sharedViewModel.deleteExerciseDay(item.id)
+                }
+                alertDialog.setNegativeButton(
+                    "No"
+                ) { _, _ -> }
+                val alert: AlertDialog = alertDialog.create()
+                alert.setCanceledOnTouchOutside(true)
+                alert.show()
             }
 
             binding.btnEditSetsReps.setOnClickListener {

@@ -24,9 +24,10 @@ class ExerciseMuscleFilterListAdapter(
         fun bind(item: Muscle, sharedViewModel: MainActivitySharedViewModel, isSecondary: Boolean) {
             binding.checkBoxCategoryFilter.text = item.name
             binding.checkBoxCategoryFilter.tag = item.id
-            binding.checkBoxCategoryFilter.isChecked =
-                item.id in sharedViewModel.equipmentFilterList
-
+            binding.checkBoxCategoryFilter.isChecked = when (isSecondary) {
+                true -> item.id in sharedViewModel.secondaryMuscleFilterList
+                false -> item.id in sharedViewModel.primaryMuscleFilterList
+            }
             binding.checkBoxCategoryFilter.setOnClickListener {
                 it as MaterialCheckBox
                 if (isSecondary) {

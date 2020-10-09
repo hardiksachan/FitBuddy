@@ -48,6 +48,17 @@ class ExerciseDetailFragment : Fragment() {
 
         binding.viewPagerExerciseDetail.setCurrentItem(selectedExerciseIndex ?: 0, false)
 
+        sharedViewModel.exerciseIdsOfSelectedDay.observe(viewLifecycleOwner, {
+            val exId = adapter.currentList[binding.viewPagerExerciseDetail.currentItem].id
+            if (exId !in it){
+                binding.btnAddExercise.text = getString(R.string.add_exercise)
+                binding.btnAddExercise.isClickable = true
+            } else {
+                binding.btnAddExercise.text = getString(R.string.exercise_selected)
+                binding.btnAddExercise.isClickable = false
+            }
+        })
+
         binding.viewPagerExerciseDetail.registerOnPageChangeCallback(object:
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -104,6 +115,8 @@ class ExerciseDetailFragment : Fragment() {
                             dialogBinding.etReps.text.toString().toInt()
                         )
                     }
+                    binding.btnAddExercise.text = getString(R.string.exercise_selected)
+                    binding.btnAddExercise.isClickable = false
                     dialogBuilder.dismiss()
                 }
 
