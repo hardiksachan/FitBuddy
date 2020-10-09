@@ -90,9 +90,9 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
 
@@ -101,9 +101,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:layout_weight=".5"
                     app:cardCornerRadius="@dimen/spacing_normal"
-                    app:cardElevation="@dimen/spacing_normal">
+                    app:cardElevation="@dimen/spacing_normal"
+                    app:layout_constraintEnd_toStartOf="@+id/cv_height"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -165,9 +172,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:layout_marginEnd="@dimen/spacing_normal"
                     android:layout_weight=".5"
                     app:cardCornerRadius="@dimen/spacing_normal"
-                    app:cardElevation="@dimen/spacing_normal">
+                    app:cardElevation="@dimen/spacing_normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/cv_weight"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -225,23 +238,20 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_exercise"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginBottom="@dimen/spacing_normal"
                     android:layout_weight=".5"
                     app:cardCornerRadius="@dimen/spacing_normal"
-                    app:cardElevation="@dimen/spacing_normal">
+                    app:cardElevation="@dimen/spacing_normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/cv_sleep"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cv_weight">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -272,9 +282,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginBottom="@dimen/spacing_normal"
                     android:layout_weight=".5"
                     app:cardCornerRadius="@dimen/spacing_normal"
-                    app:cardElevation="@dimen/spacing_normal">
+                    app:cardElevation="@dimen/spacing_normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/cv_exercise"
+                    app:layout_constraintTop_toBottomOf="@+id/cv_height">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -294,13 +311,12 @@
                             android:layout_width="96dp"
                             android:layout_height="96dp"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_fitness_center_white_18dp"
-                            app:tint="@android:color/black" />
+                            app:srcCompat="@drawable/ic_sleep_active" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>

@@ -24,7 +24,7 @@
     <string name="unit_cm">cm</string>
     <string name="age_format_years">%d yrs</string>
     <string name="submit">SUBMIT</string>
-    <string name="workout_manager">Workout Manager</string>
+    <string name="workout_manager">Workout</string>
     <string name="add_exercise">Add Exercise</string>
     <string name="exercise_sets">Sets</string>
     <string name="exercise_reps">Reps</string>
@@ -53,7 +53,7 @@
     <string name="three_ok">OK</string>
     <string name="four_pretty_good">Pretty good</string>
     <string name="five_excellent">Excellent!</string>
-    <string name="sleep_tracker">Sleep Tracker</string>
+    <string name="sleep_tracker">Sleep</string>
     <string name="minutes_length">%d minutes on %s</string>
     <string name="hours_length">%d hours on %s</string>
     <string name="seconds_length">%d seconds on %s</string>
