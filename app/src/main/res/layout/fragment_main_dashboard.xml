@@ -118,7 +118,6 @@
                             android:text="@string/weight"
                             android:textAlignment="center"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            app:drawableRightCompat="@drawable/ic_navigate_next_white_18dp"
                             app:drawableTint="@android:color/black" />
 
                         <TextView
@@ -149,6 +148,15 @@
                             android:text="@string/update"
                             android:textColor="@color/secondaryColor" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/history"
+                            android:textAlignment="center"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            app:drawableRightCompat="@drawable/ic_navigate_next_white_18dp"
+                            app:drawableTint="@android:color/black" />
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -174,7 +182,6 @@
                             android:text="@string/height"
                             android:textAlignment="center"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            app:drawableRightCompat="@drawable/ic_navigate_next_white_18dp"
                             app:drawableTint="@android:color/black" />
 
                         <TextView
@@ -204,6 +211,16 @@
                             android:layout_height="wrap_content"
                             android:text="@string/update"
                             android:textColor="@color/secondaryColor" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/history"
+                            android:textAlignment="center"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            app:drawableRightCompat="@drawable/ic_navigate_next_white_18dp"
+                            app:drawableTint="@android:color/black" />
+
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

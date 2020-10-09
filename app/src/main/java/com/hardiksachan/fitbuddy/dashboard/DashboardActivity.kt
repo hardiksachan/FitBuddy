@@ -25,7 +25,8 @@ class DashboardActivity : AppCompatActivity() {
         AppBarConfiguration(
             setOf(
                 R.id.mainDashboardFragment,
-                R.id.exerciseByDayFragment
+                R.id.exerciseByDayFragment,
+                R.id.aboutFragment
             ),
             drawerLayout
         )

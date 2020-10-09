@@ -31,4 +31,9 @@
     <string name="exercise_selected">Selected</string>
     <string name="edit_sets_reps">EDIT</string>
     <string name="dashboard">Dashboard</string>
+    <string name="my_name">NAME:\nHardik Sachan</string>
+    <string name="cf_code">CF06</string>
+    <string name="school_name">SCHOOL:\nDelhi Public School Barra</string>
+    <string name="about">About</string>
+    <string name="history">History</string>
 </resources>
