@@ -161,7 +161,9 @@ fun getDatabase(context: Context): ExerciseDatabase {
                 context.applicationContext,
                 ExerciseDatabase::class.java,
                 "fit_buddy_db.db"
-            ).fallbackToDestructiveMigration()
+            )
+                .createFromAsset("fit_buddy_db.db")
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

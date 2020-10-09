@@ -10,7 +10,6 @@ import com.hardiksachan.fitbuddy.domain.User
 import com.hardiksachan.fitbuddy.domain.Weight
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.util.*
 
 class FirstRunActivitySharedViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,13 +18,22 @@ class FirstRunActivitySharedViewModel(application: Application) : AndroidViewMod
 
     private val fitBuddyRepository = FitBuddyRepository(application)
 
-    fun saveUser(){
+//    init {
+//        viewModelScope.launch {
+//            fitBuddyRepository.refreshMuscles()
+//            fitBuddyRepository.refreshEquipments()
+//            fitBuddyRepository.refreshExerciseCategories()
+//            fitBuddyRepository.refreshExercises()
+//        }
+//    }
+
+    fun saveUser() {
         viewModelScope.launch {
             fitBuddyRepository.insertUser(user)
         }
     }
 
-    fun saveHeight(h: List<Int>){
+    fun saveHeight(h: List<Int>) {
         viewModelScope.launch {
             fitBuddyRepository.insertHeights(h.map {
                 Height(
@@ -36,7 +44,7 @@ class FirstRunActivitySharedViewModel(application: Application) : AndroidViewMod
         }
     }
 
-    fun saveWeight(w: List<Float>){
+    fun saveWeight(w: List<Float>) {
         viewModelScope.launch {
             fitBuddyRepository.insertWeights(w.map {
                 Weight(

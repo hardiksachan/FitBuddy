@@ -42,12 +42,13 @@ class MainActivitySharedViewModel(application: Application) : AndroidViewModel(a
 //    fun repositoryUpdateHandled() = fitBuddyRepository.onRepositoryUpdatedHandled()
 
     init {
-        viewModelScope.launch {
-            fitBuddyRepository.refreshMuscles()
-            fitBuddyRepository.refreshEquipments()
-            fitBuddyRepository.refreshExerciseCategories()
-            fitBuddyRepository.refreshExercises()
-        }
+        // TODO: Uncomment to use Api
+//        viewModelScope.launch {
+//            fitBuddyRepository.refreshMuscles()
+//            fitBuddyRepository.refreshEquipments()
+//            fitBuddyRepository.refreshExerciseCategories()
+//            fitBuddyRepository.refreshExercises()
+//        }
         _eventUpdateExerciseLiveDataObserver.value = true
     }
 

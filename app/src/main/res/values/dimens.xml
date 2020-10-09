@@ -7,4 +7,5 @@
     <dimen name="spacing_large">24dp</dimen>
     <dimen name="spacing_extra_large">32dp</dimen>
     <dimen name="chip_radius_tiny">2dp</dimen>
+    <dimen name="dots_indicator_size">5dp</dimen>
 </resources>

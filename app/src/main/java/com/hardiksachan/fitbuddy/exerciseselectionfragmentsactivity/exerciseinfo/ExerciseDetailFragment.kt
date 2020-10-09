@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.hardiksachan.fitbuddy.R
 import com.hardiksachan.fitbuddy.databinding.DialogAddExerciseBinding
 import com.hardiksachan.fitbuddy.databinding.FragmentExerciseDetailBinding
@@ -50,7 +51,7 @@ class ExerciseDetailFragment : Fragment() {
 
         sharedViewModel.exerciseIdsOfSelectedDay.observe(viewLifecycleOwner, {
             val exId = adapter.currentList[binding.viewPagerExerciseDetail.currentItem].id
-            if (exId !in it){
+            if (exId !in it) {
                 binding.btnAddExercise.text = getString(R.string.add_exercise)
                 binding.btnAddExercise.isClickable = true
             } else {
@@ -59,13 +60,13 @@ class ExerciseDetailFragment : Fragment() {
             }
         })
 
-        binding.viewPagerExerciseDetail.registerOnPageChangeCallback(object:
+        binding.viewPagerExerciseDetail.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val exId = adapter.currentList[binding.viewPagerExerciseDetail.currentItem].id
                 sharedViewModel.exerciseIdsOfSelectedDay.observe(viewLifecycleOwner, {
-                    if (exId !in it){
+                    if (exId !in it) {
                         binding.btnAddExercise.text = getString(R.string.add_exercise)
                         binding.btnAddExercise.isClickable = true
                     } else {

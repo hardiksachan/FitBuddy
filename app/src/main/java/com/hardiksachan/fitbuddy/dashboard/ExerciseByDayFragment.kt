@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.google.android.material.tabs.TabLayoutMediator
 import com.hardiksachan.fitbuddy.databinding.ExerciseByDayFragmentBinding
-import com.hardiksachan.fitbuddy.exerciseselectionfragmentsactivity.MainActivitySharedViewModel
 import java.util.*
 
 class ExerciseByDayFragment : Fragment() {
@@ -42,6 +41,10 @@ class ExerciseByDayFragment : Fragment() {
         binding.viewPagerDay.setCurrentItem(
             Calendar.getInstance().get(Calendar.DAY_OF_WEEK).minus(2), false
         )
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPagerDay) { tab, pos ->
+
+        }.attach()
 
         return binding.root
     }
