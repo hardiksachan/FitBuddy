@@ -119,7 +119,7 @@ data class DatabaseExerciseByDay constructor(
 ) {
     fun asDomainModel(repository: FitBuddyRepository): ExerciseDay {
         return ExerciseDay(
-            exercise = Transformations.map(repository.getExerciseFromId(exerciseId?: -255)) {
+            exercise = Transformations.map(repository.getExerciseFromId(exerciseId ?: -255)) {
                 listOf(it).asDomainModel(repository)[0]
             },
             id = id,
@@ -129,6 +129,16 @@ data class DatabaseExerciseByDay constructor(
         )
     }
 }
+
+// Also used as Domain Model
+@Entity(tableName = "database_sleep")
+data class SleepNight constructor(
+    @PrimaryKey(autoGenerate = true)
+    var nightId: Long = 0L,
+    val startTimeMilli: Long = System.currentTimeMillis(),
+    var endTimeMilli: Long = startTimeMilli,
+    var sleepQuality: Int = -1
+)
 
 @JvmName("asDomainModelDatabaseExercise")
 fun List<DatabaseExercise>.asDomainModel(repository: FitBuddyRepository): List<Exercise> {

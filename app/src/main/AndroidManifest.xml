@@ -20,8 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".firstRun.FirstRunActivity" />
-        <activity android:name=".exerciseselectionfragmentsactivity.MainActivity"
-            android:parentActivityName=".dashboard.DashboardActivity"/>
+        <activity
+            android:name=".exerciseselectionfragmentsactivity.MainActivity"
+            android:parentActivityName=".dashboard.DashboardActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

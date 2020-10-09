@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-private const val DATABASE_VERSION = 18
+private const val DATABASE_VERSION = 19
 
 private const val SEARCH_QUERY =
     "(name LIKE :searchText OR category = (SELECT id from database_exercise_category WHERE name LIKE :searchText)) ORDER BY name"
@@ -122,13 +122,31 @@ interface ExerciseDao {
     fun getExerciseByDay(day: Int): LiveData<List<DatabaseExerciseByDay>>
 
     @Query("SELECT exerciseId FROM database_exercise_by_day WHERE day = :day")
-    fun getExerciseIdListOfDay(day: Int) : LiveData<List<Int>>
+    fun getExerciseIdListOfDay(day: Int): LiveData<List<Int>>
 
     @Update
     fun updateExerciseByDat(exerciseByDay: DatabaseExerciseByDay)
 
     @Query("DELETE FROM database_exercise_by_day WHERE id = :id")
     fun deleteExerciseDaybyId(id: Int)
+
+    @Insert
+    fun insertSleepNight(night: SleepNight)
+
+    @Update
+    fun updateSleepNight(night: SleepNight)
+
+    @Query("SELECT * from database_sleep WHERE nightId = :key")
+    fun getSleepNight(key: Long): SleepNight
+
+    @Query("DELETE FROM database_sleep")
+    fun clearSleepNights()
+
+    @Query("SELECT * FROM database_sleep ORDER BY nightId DESC")
+    fun getAllNights(): LiveData<List<SleepNight>>
+
+    @Query("SELECT * FROM database_sleep ORDER BY nightId DESC LIMIT 1")
+    fun getTonight(): SleepNight?
 }
 
 @Database(
@@ -142,7 +160,8 @@ interface ExerciseDao {
         DatabaseUser::class,
         DatabaseHeight::class,
         DatabaseWeight::class,
-        DatabaseExerciseByDay::class
+        DatabaseExerciseByDay::class,
+        SleepNight::class
     ],
     version = DATABASE_VERSION,
     exportSchema = false

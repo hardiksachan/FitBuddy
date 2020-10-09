@@ -113,6 +113,14 @@ class MainDashboardFragment : Fragment() {
                 )
         }
 
+        binding.cvSleep.setOnClickListener {
+            findNavController()
+                .navigate(
+                    MainDashboardFragmentDirections
+                        .actionMainDashboardFragmentToSleepTrackerFragment()
+                )
+        }
+
         binding.cvWeight.setOnClickListener {
             findNavController()
                 .navigate(

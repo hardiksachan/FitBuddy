@@ -81,7 +81,7 @@ class FitBuddyRepository(private val applicationContext: Context) {
         }
     }
 
-    fun getExerciseIdByDay(day: Int) : LiveData<List<Int>> {
+    fun getExerciseIdByDay(day: Int): LiveData<List<Int>> {
         return database.exerciseDao.getExerciseIdListOfDay(day)
     }
 
@@ -117,6 +117,8 @@ class FitBuddyRepository(private val applicationContext: Context) {
 
     val currentWeight = database.exerciseDao.getCurrentWeight()
     val currentHeight = database.exerciseDao.getCurrentHeight()
+
+    val allSleepNights = database.exerciseDao.getAllNights()
 
     fun getExerciseCategoryFromId(id: Int) = database.exerciseDao.getExerciseCategoryNameFromId(id)
 
@@ -172,13 +174,13 @@ class FitBuddyRepository(private val applicationContext: Context) {
         }
     }
 
-    suspend fun deleteExerciseDay(id: Int){
-        withContext(Dispatchers.IO){
+    suspend fun deleteExerciseDay(id: Int) {
+        withContext(Dispatchers.IO) {
             database.exerciseDao.deleteExerciseDaybyId(id)
         }
     }
 
-    suspend fun updateExerciseDay(exerciseDay: ExerciseDay){
+    suspend fun updateExerciseDay(exerciseDay: ExerciseDay) {
         withContext(Dispatchers.IO) {
             database.exerciseDao.updateExerciseByDat(
                 DatabaseExerciseByDay(
@@ -189,6 +191,36 @@ class FitBuddyRepository(private val applicationContext: Context) {
                     day = exerciseDay.day
                 )
             )
+        }
+    }
+
+    suspend fun insertSleepNight(night: SleepNight) {
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.insertSleepNight(night)
+        }
+    }
+
+    suspend fun updateSleepNight(night: SleepNight) {
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.updateSleepNight(night)
+        }
+    }
+
+    suspend fun getSleepNight(key: Long) {
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.getSleepNight(key)
+        }
+    }
+
+    suspend fun getTonight(): SleepNight? {
+        return withContext(Dispatchers.IO) {
+            database.exerciseDao.getTonight()
+        }
+    }
+
+    suspend fun clearsleepNight() {
+        withContext(Dispatchers.IO) {
+            database.exerciseDao.clearSleepNights()
         }
     }
 

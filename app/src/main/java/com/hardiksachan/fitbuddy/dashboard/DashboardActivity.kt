@@ -26,7 +26,8 @@ class DashboardActivity : AppCompatActivity() {
             setOf(
                 R.id.mainDashboardFragment,
                 R.id.exerciseByDayFragment,
-                R.id.aboutFragment
+                R.id.aboutFragment,
+                R.id.sleepTrackerFragment
             ),
             drawerLayout
         )
