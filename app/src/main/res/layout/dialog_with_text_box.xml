@@ -41,6 +41,7 @@
             android:id="@+id/btn_submit"
             style="?attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
+            android:textColor="@color/secondaryColor"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_large"
             android:text="@string/submit"
@@ -53,6 +54,7 @@
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
+            android:textColor="@color/secondaryColor"
             android:layout_height="wrap_content"
             android:text="@android:string/cancel"
             style="?attr/borderlessButtonStyle"

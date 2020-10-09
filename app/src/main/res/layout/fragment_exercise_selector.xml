@@ -38,6 +38,7 @@
                 </androidx.appcompat.widget.SearchView>
 
                 <Button
+                    android:textColor="@color/secondaryColor"
                     android:id="@+id/btn_clear_filters"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"

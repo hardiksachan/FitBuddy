@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_small"
             android:layout_marginStart="@dimen/spacing_normal"
+            android:textColor="@color/secondaryColor"
             android:layout_marginEnd="@dimen/spacing_normal"
             android:layout_marginBottom="@dimen/spacing_small"
             android:text="@string/add_exercise"

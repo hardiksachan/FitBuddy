@@ -1,6 +1,7 @@
 package com.hardiksachan.fitbuddy.dashboard
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +55,8 @@ class ExerciseListByDayAdapter(
 
 
             binding.ivDeleteExerciseDay.setOnClickListener {
-                val alertDialog: AlertDialog.Builder = AlertDialog.Builder(binding.root.context)
+                val alertDialog: AlertDialog.Builder = AlertDialog.Builder(binding.root.context,
+                    R.style.AlertDialogTheme)
                 alertDialog.setTitle("Confirm Delete")
                 alertDialog.setMessage("Do you want to delete this exercise?")
                 alertDialog.setPositiveButton(
