@@ -97,6 +97,7 @@
 
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_weight"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_normal"
@@ -116,7 +117,9 @@
                             android:paddingVertical="@dimen/spacing_small"
                             android:text="@string/weight"
                             android:textAlignment="center"
-                            android:textAppearance="?attr/textAppearanceHeadline6" />
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            app:drawableRightCompat="@drawable/ic_navigate_next_white_18dp"
+                            app:drawableTint="@android:color/black" />
 
                         <TextView
                             android:id="@+id/tv_user_wt"
@@ -150,6 +153,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_height"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_normal"
@@ -169,7 +173,9 @@
                             android:paddingVertical="@dimen/spacing_small"
                             android:text="@string/height"
                             android:textAlignment="center"
-                            android:textAppearance="?attr/textAppearanceHeadline6" />
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            app:drawableRightCompat="@drawable/ic_navigate_next_white_18dp"
+                            app:drawableTint="@android:color/black" />
 
                         <TextView
                             android:id="@+id/tv_user_ht"

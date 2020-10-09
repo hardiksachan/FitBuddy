@@ -113,6 +113,22 @@ class MainDashboardFragment : Fragment() {
                 )
         }
 
+        binding.cvWeight.setOnClickListener {
+            findNavController()
+                .navigate(
+                    MainDashboardFragmentDirections
+                        .actionMainDashboardFragmentToWeightGraphFragment()
+                )
+        }
+
+        binding.cvHeight.setOnClickListener {
+            findNavController()
+                .navigate(
+                    MainDashboardFragmentDirections
+                        .actionMainDashboardFragmentToHeightGraphFragment()
+                )
+        }
+
         return binding.root
     }
 }

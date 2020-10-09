@@ -16,7 +16,7 @@ class MainDashboardViewModel(application: Application) : AndroidViewModel(applic
     private val fitBuddyRepository = FitBuddyRepository(application)
 
     val user = fitBuddyRepository.user
-    val weightList = fitBuddyRepository.weightList
+
     val currentWeight = fitBuddyRepository.currentWeight
     val heightList = fitBuddyRepository.heightList
     val currentHeight = fitBuddyRepository.currentHeight

@@ -96,5 +96,8 @@ dependencies {
     // Material view
     implementation 'com.google.android.material:material:1.2.1'
 
+    // GraphView
+    implementation 'com.jjoe64:graphview:4.2.2'
+
 
 }

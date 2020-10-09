@@ -16,6 +16,9 @@ class DashboardActivitySharedViewModel(application: Application) : AndroidViewMo
 
     private val fitBuddyRepository = FitBuddyRepository(application)
 
+    val weightList = fitBuddyRepository.weightList
+    val heightList = fitBuddyRepository.heightList
+
     fun updateExerciseSetsReps(exerciseDay: ExerciseDay) {
         viewModelScope.launch {
             fitBuddyRepository.updateExerciseDay(exerciseDay)
