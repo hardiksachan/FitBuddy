@@ -45,6 +45,26 @@ class MainDashboardFragment : Fragment() {
             }
         })
 
+        viewModel.bmi.observe(viewLifecycleOwner, { bmi ->
+            binding.tvUserBmi.text = getString(
+                when {
+                    bmi <= 18.5 -> {
+                        R.string.bmi_underweight
+                    }
+                    bmi <= 24.9 -> {
+                        R.string.bmi_normal
+                    }
+                    bmi <= 29.9 -> {
+                        R.string.bmi_overweight
+                    }
+                    else -> {
+                        R.string.bmi_obese
+                    }
+                },
+                bmi
+            )
+        })
+
         viewModel.currentHeight.observe(viewLifecycleOwner, {
             binding.tvUserHt.text = it.toString()
         })
@@ -105,7 +125,7 @@ class MainDashboardFragment : Fragment() {
             dialogBuilder.show()
         }
 
-        binding.cvExercise.setOnClickListener{
+        binding.cvExercise.setOnClickListener {
             findNavController()
                 .navigate(
                     MainDashboardFragmentDirections

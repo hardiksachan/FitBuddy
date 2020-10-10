@@ -1,10 +1,7 @@
 package com.hardiksachan.fitbuddy.dashboard
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.hardiksachan.fitbuddy.domain.Height
 import com.hardiksachan.fitbuddy.domain.Weight
 import com.hardiksachan.fitbuddy.repository.FitBuddyRepository
@@ -20,6 +17,12 @@ class MainDashboardViewModel(application: Application) : AndroidViewModel(applic
     val currentWeight = fitBuddyRepository.currentWeight
     val heightList = fitBuddyRepository.heightList
     val currentHeight = fitBuddyRepository.currentHeight
+
+    val bmi = Transformations.switchMap(currentHeight) {height ->
+        Transformations.map(currentWeight){weight ->
+            (weight*10000)/(height*height)
+        }
+    }
 
 
     fun updateHeight(h: List<Int>){
