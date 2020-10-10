@@ -10,16 +10,16 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
+        android:layout_width="196dp"
+        android:layout_height="196dp"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/app_name_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        app:tint="@color/secondaryColor" />
+        app:srcCompat="@drawable/logo_png" />
 
     <TextView
         android:id="@+id/app_name_tv"
@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textAppearance="?attr/textAppearanceHeadline2"
-        android:textStyle="bold"
         android:textColor="@color/secondaryColor"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
